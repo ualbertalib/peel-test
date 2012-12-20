@@ -1,0 +1,11 @@
+<ivy-module version="2.0">
+  <info organisation="ca.ualibrary.dit.peel" module="peel-test"/>
+  <configurations>
+    <conf name="compile" />
+    <conf name="test" extends="compile" />
+  </configurations>
+  <dependencies>
+    <dependency org="junit" name="junit" rev="4.10" conf="test->default"/>
+    <dependency org="org.jbehave" name="jbehave-core" rev="3.7" conf="test->default"/>
+  </dependencies>
+</ivy-module>
