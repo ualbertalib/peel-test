@@ -21,7 +21,7 @@ public class SimpleSearchStory extends JUnitStory {
 		// CONSOLE and TXT reporting
 		.useStoryReporterBuilder(
 			new StoryReporterBuilder().withDefaultFormats()
-				.withFormats(Format.CONSOLE, Format.TXT));
+				.withFormats(Format.CONSOLE, Format.XML));
     }
 
     // Here we specify the steps classes
