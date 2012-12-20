@@ -17,10 +17,7 @@
 	</target>
 
 	<target name="compile.java" depends="init">
-    <mkdir dir="${target.classes.java.dir}"/>
-    <javac destdir="${target.classes.java.dir}">
-      <src path="${src.java.dir}"/>
-    </javac> 
+    <!-- place holder -->
   </target>
 
   <target name="compile.test" depends="compile.java">
