@@ -64,8 +64,6 @@
     <mkdir dir="${target.report.dir}"/>
     
     <junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="yes">
-      <formatter type="plain" usefile="false"/>
-      <formatter type="xml"/>
       <batchtest todir="${target.report.dir}">
         <fileset dir="${src.test.dir}">
             <include name="**/*Story.java"/>
