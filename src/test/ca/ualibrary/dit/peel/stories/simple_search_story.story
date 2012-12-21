@@ -6,7 +6,11 @@ I want to search the peel portal
 Scenario: Simple Search with single term
 
 Given visitor is on the front page
-When user enters 'horse' in the form
+When user enters <query> in the form
 And user clicks 'search'
 Then title is 'Search Results'
-And hits > 0
+And hits <hits>
+
+Examples:     
+|query|hits|
+|horse|2741|

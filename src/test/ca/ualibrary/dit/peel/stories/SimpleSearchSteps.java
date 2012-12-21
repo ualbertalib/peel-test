@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.BeforeStory;
 import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
@@ -42,11 +43,11 @@ public class SimpleSearchSteps extends SeleneseTestBase {
 		driver.getTitle());
     }
 
-    @When("user enters 'horse' in the form")
-    public void whenUserEntershorseInTheForm() {
+    @When("user enters <query> in the form")
+    public void whenUserEntersqueryInTheForm(@Named("query") String query) {
 	driver.findElement(By.xpath("(//input[@id='keywords'])[2]")).clear();
 	driver.findElement(By.xpath("(//input[@id='keywords'])[2]")).sendKeys(
-		"horse");
+		query);
     }
 
     @When("user clicks 'search'")
@@ -59,12 +60,12 @@ public class SimpleSearchSteps extends SeleneseTestBase {
 	assertEquals("Search Results", driver.getTitle());
     }
 
-    @Then("hits > 0")
-    public void thenHitsGreaterThanZero() {
+    @Then("hits <hits>")
+    public void thenHitsGreaterThanZero(@Named("hits") String hits) {
 	// Warning: verifyTextPresent may require manual changes
 	try {
 	    assertTrue(driver.findElement(By.cssSelector("BODY")).getText()
-		    .matches("^[\\s\\S]*2741 hits found\\.[\\s\\S]*$"));
+		    .matches("^[\\s\\S]*" + hits + " hits found\\.[\\s\\S]*$"));
 	} catch (Error e) {
 	    verificationErrors.append(e.toString());
 	}
