@@ -14,7 +14,7 @@ public class SimpleSearchStory extends JUnitStory {
     @Override
     public Configuration configuration() {
 	return new MostUsefulConfiguration()
-	// where to find the stories
+		// where to find the stories
 		.useStoryLoader(new LoadFromClasspath(this.getClass()))
 		.useStoryReporterBuilder(
 			new StoryReporterBuilder().withDefaultFormats()

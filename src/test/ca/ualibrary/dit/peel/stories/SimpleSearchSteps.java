@@ -1,59 +1,72 @@
 package ca.ualibrary.dit.peel.stories;
 
+import java.util.concurrent.TimeUnit;
+
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.BeforeStory;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.openqa.selenium.server.SeleniumServer;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
-import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestBase;
 
 public class SimpleSearchSteps extends SeleneseTestBase {
-    
-    private DefaultSelenium selenium;
-    private SeleniumServer seleniumServer;
+
+    private WebDriver driver;;
+    private String baseUrl;
 
     @BeforeStory
     public void setUp() throws Exception {
-	selenium = new DefaultSelenium("localhost", 4444, "*chrome",
-		"http://cocoon-server/");
-	seleniumServer = new SeleniumServer();
-	seleniumServer.start();
-	selenium.start();
+	driver = new FirefoxDriver();
+	baseUrl = "http://cocoon-server/";
+	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
-    
+
     @AfterStory
     public void tearDown() {
-	selenium.stop();
-	seleniumServer.stop();
+	driver.quit();
+	String verificationErrorString = verificationErrors.toString();
+	if (!"".equals(verificationErrorString)) {
+	    fail(verificationErrorString);
+	}
     }
 
     @Given("visitor is on the front page")
     public void givenVisitorIsOnTheFrontPage() {
-	selenium.open("/index.html");
+	driver.get(baseUrl + "/index.html");
+	assertEquals(
+		"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
+		driver.getTitle());
     }
 
     @When("user enters 'horse' in the form")
     public void whenUserEntershorseInTheForm() {
-	selenium.type("xpath=(//input[@id='keywords'])[2]", "horse");
+	driver.findElement(By.xpath("(//input[@id='keywords'])[2]")).clear();
+	driver.findElement(By.xpath("(//input[@id='keywords'])[2]")).sendKeys(
+		"horse");
     }
 
     @When("user clicks 'search'")
     public void whenUserClickssearch() {
-	selenium.click("xpath=(//input[@id='submit'])[2]");
-	selenium.waitForPageToLoad("30000");
+	driver.findElement(By.xpath("(//input[@id='submit'])[2]")).click();
     }
 
     @Then("title is 'Search Results'")
     public void thenTitleIsSearchResults() {
-	verifyEquals(selenium.getTitle(), "Search Results");
+	assertEquals("Search Results", driver.getTitle());
     }
 
     @Then("hits > 0")
     public void thenHitsGreaterThanZero() {
-	verifyTrue(selenium
-		.isTextPresent("2741 hits found."));
+	// Warning: verifyTextPresent may require manual changes
+	try {
+	    assertTrue(driver.findElement(By.cssSelector("BODY")).getText()
+		    .matches("^[\\s\\S]*2741 hits found\\.[\\s\\S]*$"));
+	} catch (Error e) {
+	    verificationErrors.append(e.toString());
+	}
     }
 }
