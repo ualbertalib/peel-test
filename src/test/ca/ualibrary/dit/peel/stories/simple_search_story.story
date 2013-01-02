@@ -13,7 +13,19 @@ And hits <hits>
 
 !-- |uk|Канада|0|
 Examples:     
-|language|query|hits|
+|type|query|hits|
 |en|horse|2741|
 |fr|Vérendrye|86|
 |cr|Kwayask ê-kî-pê-kiskinowâpahtihicik|13|
+
+Scenario: Simple Search with phrase
+
+Given visitor is on the front page
+When user enters <query> in the form
+And user clicks 'search'
+Then title is 'Search Results'
+And hits <hits>
+
+Examples:     
+|type|query|hits|
+|phrase|"rocky mountains"|1409|
