@@ -46,6 +46,7 @@
         <mkdir dir="${target.report.dir}"/>
         
         <junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="yes">
+            <jvmarg value="-Dfile.encoding=UTF-8"/>
             <batchtest todir="${target.report.dir}">
                 <fileset dir="${src.test.dir}">
                     <include name="**/*Story.java"/>

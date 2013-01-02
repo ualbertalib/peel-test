@@ -11,6 +11,9 @@ And user clicks 'search'
 Then title is 'Search Results'
 And hits <hits>
 
+!-- |uk|Канада|0|
 Examples:     
-|query|hits|
-|horse|2741|
+|language|query|hits|
+|en|horse|2741|
+|fr|Vérendrye|86|
+|cr|Kwayask ê-kî-pê-kiskinowâpahtihicik|13|
