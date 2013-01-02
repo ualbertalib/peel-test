@@ -48,3 +48,14 @@ Examples:
 |boolean|horse -dog|1377|
 |boolean|horse NOT dog|1377|
 
+Scenario: Simple Search with truncation
+
+Given visitor is on the front page
+When user enters <query> in the form
+And user clicks 'search'
+Then title is 'Search Results'
+And hits <hits>
+
+Examples:     
+|type|query|hits|
+|truncation|horse*|3366|
