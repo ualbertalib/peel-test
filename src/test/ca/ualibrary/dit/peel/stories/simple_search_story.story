@@ -59,3 +59,15 @@ And hits <hits>
 Examples:     
 |type|query|hits|
 |truncation|horse*|3366|
+
+Scenario: Simple Search with fuzzy
+
+Given visitor is on the front page
+When user enters <query> in the form
+And user clicks 'search'
+Then title is 'Search Results'
+And hits <hits>
+
+Examples:     
+|type|query|hits|
+|truncation|horse~|6736|
