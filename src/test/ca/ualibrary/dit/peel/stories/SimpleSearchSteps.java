@@ -57,17 +57,22 @@ public class SimpleSearchSteps extends SeleneseTestBase {
 
     @Then("title is 'Search Results'")
     public void thenTitleIsSearchResults() {
+	driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 	assertEquals("Search Results", driver.getTitle());
     }
 
     @Then("hits <hits>")
     public void thenHitsGreaterThanZero(@Named("hits") String hits) {
-	// Warning: verifyTextPresent may require manual changes
+	String hitsFoundActual = "";
+	String hitsFoundExpected =  hits + " hits found\\.";
 	try {
-	    assertTrue(driver.findElement(By.cssSelector("BODY")).getText()
-		    .matches("^[\\s\\S]*" + hits + " hits found\\.[\\s\\S]*$"));
+	    hitsFoundActual = driver.findElement(By.className("hits-found"))
+		    .getText();
 	} catch (Error e) {
 	    verificationErrors.append(e.toString());
 	}
+	assertTrue("'" + hitsFoundActual + "' should match '"
+		+ hitsFoundExpected + "'",
+		hitsFoundActual.matches(hitsFoundExpected));
     }
 }
