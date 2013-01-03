@@ -1,6 +1,7 @@
 package ca.ualibrary.dit.peel.stories;
 
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.BeforeStory;
@@ -59,6 +60,24 @@ public class SimpleSearchSteps extends SeleneseTestBase {
     public void thenTitleIsSearchResults() {
 	driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 	assertEquals("Search Results", driver.getTitle());
+    }
+
+    @Then("breadcrumbs contain <query>")
+    public void thenBreadcrumbsContainquery(@Named("query") String query) {
+	String breadcrumbsFoundActual = "";
+	String breadcrumbsFoundExpected = "^[\\s\\S]*Query: "
+		+ Pattern.quote(query)
+		+ "[\\s\\S]*$";
+	try {
+	    breadcrumbsFoundActual = driver.findElement(
+		    By.className("breadcrumbs"))
+		    .getText();
+	} catch (Error e) {
+	    verificationErrors.append(e.toString());
+	}
+	assertTrue("'" + breadcrumbsFoundActual + "' should match regex '"
+		+ breadcrumbsFoundExpected + "'",
+		breadcrumbsFoundActual.matches(breadcrumbsFoundExpected));
     }
 
     @Then("hits <hits>")

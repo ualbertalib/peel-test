@@ -9,6 +9,7 @@ Given visitor is on the front page
 When user enters <query> in the form
 And user clicks 'search'
 Then title is 'Search Results'
+And breadcrumbs contain <query>
 And hits <hits>
 
 Examples:     
