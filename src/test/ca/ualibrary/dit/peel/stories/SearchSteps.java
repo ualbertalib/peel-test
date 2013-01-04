@@ -15,7 +15,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
 
-public class SimpleSearchSteps extends SeleneseTestBase {
+public class SearchSteps extends SeleneseTestBase {
 
     private WebDriver driver;;
     private String baseUrl;
@@ -45,14 +45,14 @@ public class SimpleSearchSteps extends SeleneseTestBase {
     }
 
     @When("user enters <query> in the form")
-    public void whenUserEntersqueryInTheForm(@Named("query") String query) {
+    public void whenUserEntersQueryInTheForm(@Named("query") String query) {
 	driver.findElement(By.xpath("(//input[@id='keywords'])[2]")).clear();
 	driver.findElement(By.xpath("(//input[@id='keywords'])[2]")).sendKeys(
 		query);
     }
 
     @When("user clicks 'search'")
-    public void whenUserClickssearch() {
+    public void whenUserClicksSearch() {
 	driver.findElement(By.xpath("(//input[@id='submit'])[2]")).click();
     }
 
@@ -63,7 +63,7 @@ public class SimpleSearchSteps extends SeleneseTestBase {
     }
 
     @Then("breadcrumbs contain <query>")
-    public void thenBreadcrumbsContainquery(@Named("query") String query) {
+    public void thenBreadcrumbsContainQuery(@Named("query") String query) {
 	String breadcrumbsFoundActual = "";
 	String breadcrumbsFoundExpected = "^[\\s\\S]*Query: "
 		+ Pattern.quote(query)
@@ -93,5 +93,37 @@ public class SimpleSearchSteps extends SeleneseTestBase {
 	assertTrue("'" + hitsFoundActual + "' should match '"
 		+ hitsFoundExpected + "'",
 		hitsFoundActual.matches(hitsFoundExpected));
+    }
+
+    @Given("visitor is on the 'find books' page")
+    public void givenVisitorIsOnTheFindBooksPage() {
+	driver.get(baseUrl + "/index.html");
+	assertEquals(
+		"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
+		driver.getTitle());
+	driver.findElement(By.cssSelector("a.tab4")).click();
+	assertEquals("Advanced Search", driver.getTitle());
+    }
+
+    @When("user enters <keywords> in the form")
+    public void whenUserEntersKeywordsInTheForm(
+	    @Named("keywords") String keywords) {
+	driver.findElement(By.id("keywords2")).clear();
+	driver.findElement(By.id("keywords2")).sendKeys(keywords);
+    }
+
+    @When("user clicks 'go'")
+    public void whenUserClicksGo() {
+	driver.findElement(By.id("submit2")).click();
+    }
+
+    @When("user selects <sort>")
+    public void whenUserSelectssort(@Named("sort") String sort) {
+	driver.findElement(By.id("sort-score")).click();
+    }
+
+    @When("user clicks 'submit' at the bottom of form")
+    public void whenUserClickssubmitAtTheBottomOfForm() {
+	driver.findElement(By.cssSelector("p.buttons > input.submit")).click();
     }
 }
