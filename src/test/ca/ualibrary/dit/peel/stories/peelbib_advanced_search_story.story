@@ -32,3 +32,15 @@ Examples:
 |horse|sort-pubyear-asc|2741|Peel 10243|
 |horse|sort-pubyear-desc|2741|Peel 10452|
 
+Scenario: Advanced search only one clause
+
+Given visitor is on the 'find books' page
+When user enters <type> <value> in the form
+And user clicks 'go'
+Then title is 'Search Results'
+And hits <hits> 
+
+Examples:     
+|type|value|hits|
+|author|Morice, Adrien|37|
+|title|Manitoba and confederation|1176|

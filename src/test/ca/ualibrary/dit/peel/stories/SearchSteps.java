@@ -51,11 +51,21 @@ public class SearchSteps extends SeleneseTestBase {
 	assertEquals("Advanced Search", driver.getTitle());
     }
 
+    @When("user enters <type> <value> in the form")
+    public void whenUserEntersTypeValueInTheForm(@Named("type") String type,
+	    @Named("value") String value) {
+	enterInElement(type + "display", value);
+    }
+
     @When("user enters <keywords> in the form")
     public void whenUserEntersKeywordsInTheForm(
 	    @Named("keywords") String keywords) {
-	driver.findElement(By.id("keywords2")).clear();
-	driver.findElement(By.id("keywords2")).sendKeys(keywords);
+	enterInElement("keywords2", keywords);
+    }
+
+    private void enterInElement(String element, String value) {
+	driver.findElement(By.id(element)).clear();
+	driver.findElement(By.id(element)).sendKeys(value);
     }
 
     @When("user clicks 'go'")
