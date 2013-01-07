@@ -35,12 +35,43 @@ Examples:
 Scenario: Advanced search only one clause
 
 Given visitor is on the 'find books' page
-When user enters <type> <value> in the form
+When user enters <id> <value> in the form
 And user clicks 'go'
 Then title is 'Search Results'
 And hits <hits> 
 
 Examples:     
-|type|value|hits|
-|author|Morice, Adrien|37|
-|title|Manitoba and confederation|1176|
+|id|value|hits|
+|authordisplay|Morice, Adrien|37|
+|titledisplay|Manitoba and confederation|1176|
+|subjectdisplay|Immigrants--Canada|2029|
+
+Scenario: Advanced search only one clause others
+
+Given visitor is on the 'find books' page
+When user enters <name> <value> in the form
+And user clicks 'go'
+Then title is 'Search Results'
+And hits <hits> 
+
+!-- |bibrecord|Alberta|0|
+Examples:     
+|name|value|hits|
+|peelnum|3459|1|
+|pubyear|1945 TO 1950|839|
+|actyear|1945 TO 1950|840|
+
+Scenario: Advanced search only one clause selection
+
+Given visitor is on the 'find books' page
+When user selects <name> <value> in the form
+And user clicks 'go'
+Then title is 'Search Results'
+And hits <hits> 
+
+Examples:     
+|name|value|hits|
+|language|en|8603|
+|language|fr|2235|
+|language|cre|197|
+|language|uk|97|

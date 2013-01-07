@@ -13,6 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.pagefactory.ByChained;
+import org.openqa.selenium.support.ui.Select;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
 
@@ -51,21 +52,34 @@ public class SearchSteps extends SeleneseTestBase {
 	assertEquals("Advanced Search", driver.getTitle());
     }
 
-    @When("user enters <type> <value> in the form")
-    public void whenUserEntersTypeValueInTheForm(@Named("type") String type,
+    @When("user enters <id> <value> in the form")
+    public void whenUserEntersIdValueInTheForm(@Named("id") String id,
 	    @Named("value") String value) {
-	enterInElement(type + "display", value);
+	enterInElement(By.id(id), value);
+    }
+
+    @When("user enters <name> <value> in the form")
+    public void whenUserEntersNameValueInTheForm(@Named("name") String name,
+	    @Named("value") String value) {
+	enterInElement(By.name(name), value);
+    }
+
+    @When("user selects <name> <value> in the form")
+    public void whenUserSelectsNameValueInTheForm(@Named("name") String name,
+	    @Named("value") String value) {
+	new Select(driver.findElement(By.name(name)))
+.selectByValue(value);
     }
 
     @When("user enters <keywords> in the form")
     public void whenUserEntersKeywordsInTheForm(
 	    @Named("keywords") String keywords) {
-	enterInElement("keywords2", keywords);
+	enterInElement(By.id("keywords2"), keywords);
     }
 
-    private void enterInElement(String element, String value) {
-	driver.findElement(By.id(element)).clear();
-	driver.findElement(By.id(element)).sendKeys(value);
+    private void enterInElement(By element, String value) {
+	driver.findElement(element).clear();
+	driver.findElement(element).sendKeys(value);
     }
 
     @When("user clicks 'go'")
