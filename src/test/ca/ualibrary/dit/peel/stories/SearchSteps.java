@@ -12,6 +12,7 @@ import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.pagefactory.ByChained;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
 
@@ -30,10 +31,6 @@ public class SearchSteps extends SeleneseTestBase {
     @AfterStory
     public void tearDown() {
 	driver.quit();
-	String verificationErrorString = verificationErrors.toString();
-	if (!"".equals(verificationErrorString)) {
-	    fail(verificationErrorString);
-	}
     }
 
     @Given("visitor is on the front page")
@@ -42,6 +39,40 @@ public class SearchSteps extends SeleneseTestBase {
 	assertEquals(
 		"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
 		driver.getTitle());
+    }
+
+    @Given("visitor is on the 'find books' page")
+    public void givenVisitorIsOnTheFindBooksPage() {
+	driver.get(baseUrl + "/index.html");
+	assertEquals(
+		"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
+		driver.getTitle());
+	driver.findElement(By.cssSelector("a.tab4")).click();
+	assertEquals("Advanced Search", driver.getTitle());
+    }
+
+    @When("user enters <keywords> in the form")
+    public void whenUserEntersKeywordsInTheForm(
+	    @Named("keywords") String keywords) {
+	driver.findElement(By.id("keywords2")).clear();
+	driver.findElement(By.id("keywords2")).sendKeys(keywords);
+    }
+
+    @When("user clicks 'go'")
+    public void whenUserClicksGo() {
+	driver.findElement(By.id("submit2")).click();
+    }
+
+    @When("user selects <sort>")
+    public void whenUserSelectsSort(@Named("sort") String sort) {
+	// TODO why do I have to do this?
+	driver.findElement(By.id("status-any")).click();
+	driver.findElement(By.id(sort)).click();
+    }
+
+    @When("user clicks 'submit' at the bottom of form")
+    public void whenUserClicksSubmitAtTheBottomOfForm() {
+	driver.findElement(By.cssSelector("p.buttons > input.submit")).click();
     }
 
     @When("user enters <query> in the form")
@@ -82,48 +113,24 @@ public class SearchSteps extends SeleneseTestBase {
 
     @Then("hits <hits>")
     public void thenHitsGreaterThanZero(@Named("hits") String hits) {
-	String hitsFoundActual = "";
 	String hitsFoundExpected =  hits + " hits found\\.";
-	try {
-	    hitsFoundActual = driver.findElement(By.className("hits-found"))
+	String hitsFoundActual = driver.findElement(
+		By.className("hits-found"))
 		    .getText();
-	} catch (Error e) {
-	    verificationErrors.append(e.toString());
-	}
 	assertTrue("'" + hitsFoundActual + "' should match '"
 		+ hitsFoundExpected + "'",
 		hitsFoundActual.matches(hitsFoundExpected));
     }
 
-    @Given("visitor is on the 'find books' page")
-    public void givenVisitorIsOnTheFindBooksPage() {
-	driver.get(baseUrl + "/index.html");
-	assertEquals(
-		"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
-		driver.getTitle());
-	driver.findElement(By.cssSelector("a.tab4")).click();
-	assertEquals("Advanced Search", driver.getTitle());
-    }
-
-    @When("user enters <keywords> in the form")
-    public void whenUserEntersKeywordsInTheForm(
-	    @Named("keywords") String keywords) {
-	driver.findElement(By.id("keywords2")).clear();
-	driver.findElement(By.id("keywords2")).sendKeys(keywords);
-    }
-
-    @When("user clicks 'go'")
-    public void whenUserClicksGo() {
-	driver.findElement(By.id("submit2")).click();
-    }
-
-    @When("user selects <sort>")
-    public void whenUserSelectssort(@Named("sort") String sort) {
-	driver.findElement(By.id("sort-score")).click();
-    }
-
-    @When("user clicks 'submit' at the bottom of form")
-    public void whenUserClickssubmitAtTheBottomOfForm() {
-	driver.findElement(By.cssSelector("p.buttons > input.submit")).click();
+    @Then("first result is <peelbib>")
+    public void thenFirstResultIsPeelbib(@Named("peelbib") String peelbib) {
+	String firstResultExpected = peelbib;
+	String firstResultActual = driver.findElement(
+		    new ByChained(By.xpath("//li[@class='result'][@value=1]"),
+			    By.xpath("//dt/a")))
+		    .getText();
+	assertTrue("'" + firstResultActual + "' should match '"
+		+ firstResultExpected + "'",
+		firstResultActual.matches(firstResultExpected));
     }
 }

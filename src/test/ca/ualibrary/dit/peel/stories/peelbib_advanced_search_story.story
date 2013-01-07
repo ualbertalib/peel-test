@@ -23,8 +23,12 @@ And user selects <sort>
 And user clicks 'submit' at the bottom of form
 Then title is 'Search Results'
 And hits <hits>
+And first result is <peelbib>
 
 Examples:     
-|keywords|sort|hits|
-|horse|score|2741|
+|keywords|sort|hits|peelbib|
+|horse|sort-score|2741|Peel 9204|
+|horse|sort-peelnum|2741|Peel 6|
+|horse|sort-pubyear-asc|2741|Peel 10243|
+|horse|sort-pubyear-desc|2741|Peel 10452|
 
