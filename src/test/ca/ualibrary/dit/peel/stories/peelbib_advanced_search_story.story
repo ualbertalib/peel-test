@@ -15,6 +15,20 @@ Examples:
 |keywords|hits|
 |horse|2741|
 
+Scenario: Advanced search with keyword and status
+
+Given visitor is on the 'find books' page
+When user enters <keywords> in the form
+And user selects fulltext
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And hits <hits>
+And first result is <peelbib>
+
+Examples:     
+|keywords|hits|peelbib|
+|horse|2443|Peel 9204|
+
 Scenario: Advanced search with keyword and sort
 
 Given visitor is on the 'find books' page
@@ -32,7 +46,7 @@ Examples:
 |horse|sort-pubyear-asc|2741|Peel 10243|
 |horse|sort-pubyear-desc|2741|Peel 10452|
 
-Scenario: Advanced search only one clause
+Scenario: Advanced search only one id clause
 
 Given visitor is on the 'find books' page
 When user enters <id> <value> in the form
@@ -46,7 +60,7 @@ Examples:
 |titledisplay|Manitoba and confederation|1176|
 |subjectdisplay|Immigrants--Canada|2029|
 
-Scenario: Advanced search only one clause others
+Scenario: Advanced search only one named clause
 
 Given visitor is on the 'find books' page
 When user enters <name> <value> in the form
@@ -54,14 +68,13 @@ And user clicks 'go'
 Then title is 'Search Results'
 And hits <hits> 
 
-!-- TODO |bibrecord|Alberta|0|
 Examples:     
 |name|value|hits|
 |peelnum|3459|1|
 |pubyear|1945 TO 1950|839|
 |actyear|1945 TO 1950|840|
 
-Scenario: Advanced search only one clause selection
+Scenario: Advanced search only one selection clause
 
 Given visitor is on the 'find books' page
 When user selects <name> <value> in the form
@@ -75,3 +88,17 @@ Examples:
 |language|fr|2235|
 |language|cre|197|
 |language|uk|97|
+
+Scenario: Advanced search using most clauses
+
+Given visitor is on the 'find books' page
+When user enters McClintock, Walter in the form id authordisplay
+And user enters Life, legends, and religion of the Blackfeet Indians in the form id titledisplay
+And user enters Indians of North America--Folklore in the form id subjectdisplay
+And user enters 1870 TO 1949 in the form name pubyear
+And user enters 1910 in the form name actyear
+And user selects en in the form name language
+And user clicks 'go'
+Then title is 'Search Results'
+And hits 1
+And first result is Peel 3461

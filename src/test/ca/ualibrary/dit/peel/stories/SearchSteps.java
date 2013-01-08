@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.jbehave.core.annotations.AfterStory;
+import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.BeforeStory;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
@@ -35,7 +36,7 @@ public class SearchSteps extends SeleneseTestBase {
 		+ "/test.properties"));
 	baseUrl = prop.getProperty("baseUrl");
 	if( "".equals( baseUrl ) )
-	    baseUrl = "http://peeldev1.library.ualberta.ca";
+	    baseUrl = "http://peel.library.ualberta.ca";
 
 	setCaptureScreenShotOnFailure(true);
     }
@@ -64,18 +65,26 @@ public class SearchSteps extends SeleneseTestBase {
     }
 
     @When("user enters <id> <value> in the form")
+    @Alias("user enters $value in the form id $id")
     public void whenUserEntersIdValueInTheForm(@Named("id") String id,
 	    @Named("value") String value) {
 	enterInElement(By.id(id), value);
     }
 
+    @When("user selects fulltext")
+    public void whenUserSelectsFulltext() {
+	driver.findElement(By.id("status-dig")).click();
+    }
+
     @When("user enters <name> <value> in the form")
+    @Alias("user enters $value in the form name $name")
     public void whenUserEntersNameValueInTheForm(@Named("name") String name,
 	    @Named("value") String value) {
 	enterInElement(By.name(name), value);
     }
 
     @When("user selects <name> <value> in the form")
+    @Alias("user selects $value in the form name $name")
     public void whenUserSelectsNameValueInTheForm(@Named("name") String name,
 	    @Named("value") String value) {
 	new Select(driver.findElement(By.name(name)))
@@ -143,6 +152,7 @@ public class SearchSteps extends SeleneseTestBase {
     }
 
     @Then("hits <hits>")
+    @Alias("hits $hits")
     public void thenHitsGreaterThanZero(@Named("hits") String hits) {
 	String hitsFoundExpected =  hits + " hits found\\.";
 	String hitsFoundActual = driver.findElement(
@@ -154,6 +164,7 @@ public class SearchSteps extends SeleneseTestBase {
     }
 
     @Then("first result is <peelbib>")
+    @Alias("first result is $peelbib")
     public void thenFirstResultIsPeelbib(@Named("peelbib") String peelbib) {
 	String firstResultExpected = peelbib;
 	String firstResultActual = driver.findElement(
