@@ -1,5 +1,7 @@
 package ca.ualibrary.dit.peel.stories;
 
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -21,12 +23,21 @@ public class SearchSteps extends SeleneseTestBase {
 
     private WebDriver driver;;
     private String baseUrl;
+    private Properties prop;
 
     @BeforeStory
     public void setUp() throws Exception {
 	driver = new FirefoxDriver();
-	baseUrl = "http://cocoon-server/";
 	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	
+	prop = new Properties();
+	prop.load(new FileInputStream(new java.io.File("").getAbsolutePath()
+		+ "/test.properties"));
+	baseUrl = prop.getProperty("baseUrl");
+	if( "".equals( baseUrl ) )
+	    baseUrl = "http://peeldev1.library.ualberta.ca";
+
+	setCaptureScreenShotOnFailure(true);
     }
 
     @AfterStory
@@ -89,7 +100,7 @@ public class SearchSteps extends SeleneseTestBase {
 
     @When("user selects <sort>")
     public void whenUserSelectsSort(@Named("sort") String sort) {
-	// TODO why do I have to do this?
+	// TODO why do I have to control status-any (or something else) before setting the sort?
 	driver.findElement(By.id("status-any")).click();
 	driver.findElement(By.id(sort)).click();
     }
@@ -119,17 +130,13 @@ public class SearchSteps extends SeleneseTestBase {
 
     @Then("breadcrumbs contain <query>")
     public void thenBreadcrumbsContainQuery(@Named("query") String query) {
-	String breadcrumbsFoundActual = "";
 	String breadcrumbsFoundExpected = "^[\\s\\S]*Query: "
 		+ Pattern.quote(query)
 		+ "[\\s\\S]*$";
-	try {
-	    breadcrumbsFoundActual = driver.findElement(
+	String breadcrumbsFoundActual = driver
+		.findElement(
 		    By.className("breadcrumbs"))
 		    .getText();
-	} catch (Error e) {
-	    verificationErrors.append(e.toString());
-	}
 	assertTrue("'" + breadcrumbsFoundActual + "' should match regex '"
 		+ breadcrumbsFoundExpected + "'",
 		breadcrumbsFoundActual.matches(breadcrumbsFoundExpected));

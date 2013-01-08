@@ -54,7 +54,7 @@ And user clicks 'go'
 Then title is 'Search Results'
 And hits <hits> 
 
-!-- |bibrecord|Alberta|0|
+!-- TODO |bibrecord|Alberta|0|
 Examples:     
 |name|value|hits|
 |peelnum|3459|1|

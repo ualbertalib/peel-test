@@ -12,6 +12,7 @@ Then title is 'Search Results'
 And breadcrumbs contain <query>
 And hits <hits>
 
+!-- TODO |uk|Канада|error|
 Examples:     
 |type|query|hits|
 |en|horse|2741|
