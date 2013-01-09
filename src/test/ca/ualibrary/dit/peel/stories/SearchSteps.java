@@ -27,17 +27,20 @@ public class SearchSteps extends SeleneseTestBase {
     private Properties prop;
 
     @BeforeStory
-    public void setUp() throws Exception {
+    public void setUp() {
 	driver = new FirefoxDriver();
 	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	
 	prop = new Properties();
-	prop.load(new FileInputStream(new java.io.File("").getAbsolutePath()
-		+ "/test.properties"));
-	baseUrl = prop.getProperty("baseUrl");
-	if( "".equals( baseUrl ) )
-	    baseUrl = "http://peel.library.ualberta.ca";
-
+	try {
+	    prop.load(new FileInputStream(new java.io.File("")
+		    .getAbsolutePath() + "/test.properties"));
+	    baseUrl = prop.getProperty("baseUrl");
+	} catch (Exception e) {
+	    baseUrl = System.getenv("baseUrl");
+	    if (null == baseUrl)
+		baseUrl = "http://peel.library.ualberta.ca";
+	}
 	setCaptureScreenShotOnFailure(true);
     }
 

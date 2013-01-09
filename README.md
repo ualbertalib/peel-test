@@ -7,7 +7,7 @@ Background
 ----------
 This package performs tests to validate and verify the peel-www project.  This package uses the Behaviour Driven Development (BDD) methodology by first writing 'stories' using the JBehave story syntax.  The stories are implemented as Selenese JUnit test cases and performed in the Firefox web browser.  
 
-By default the package will test peel.library.ualberta.ca.  To test another target set the baseUrl in test.properties.  See test.properties.sample for an example.
+By default the package will test peel.library.ualberta.ca.  To test another target set the baseUrl in test.properties or as an environment variable.  See test.properties.sample for an example.
 
 Requirements
 ------------
