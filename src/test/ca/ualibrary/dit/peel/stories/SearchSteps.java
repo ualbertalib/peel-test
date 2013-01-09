@@ -26,10 +26,12 @@ public class SearchSteps extends SeleneseTestBase {
     private String baseUrl;
     private Properties prop;
 
+    private static long WAIT_TIME = 3;
+
     @BeforeStory
     public void setUp() {
 	driver = new FirefoxDriver();
-	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	driver.manage().timeouts().implicitlyWait(WAIT_TIME, TimeUnit.SECONDS);
 	
 	prop = new Properties();
 	try {
@@ -51,7 +53,8 @@ public class SearchSteps extends SeleneseTestBase {
 
     @Given("visitor is on the front page")
     public void givenVisitorIsOnTheFrontPage() {
-	driver.get(baseUrl + "/index.html");
+	driver.get(baseUrl + "index.html");
+	driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 	assertEquals(
 		"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
 		driver.getTitle());
@@ -59,11 +62,13 @@ public class SearchSteps extends SeleneseTestBase {
 
     @Given("visitor is on the 'find books' page")
     public void givenVisitorIsOnTheFindBooksPage() {
-	driver.get(baseUrl + "/index.html");
+	driver.get(baseUrl + "index.html");
+	driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 	assertEquals(
 		"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
 		driver.getTitle());
 	driver.findElement(By.cssSelector("a.tab4")).click();
+	driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 	assertEquals("Advanced Search", driver.getTitle());
     }
 
@@ -134,7 +139,7 @@ public class SearchSteps extends SeleneseTestBase {
 
     @Then("title is 'Search Results'")
     public void thenTitleIsSearchResults() {
-	driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+	driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 	assertEquals("Search Results", driver.getTitle());
     }
 
