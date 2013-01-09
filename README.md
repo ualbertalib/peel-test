@@ -12,9 +12,9 @@ By default the package will test peel.library.ualberta.ca.  To test another targ
 Requirements
 ------------
 * Java 6+
-* Apache Ant
-* Apache Ivy
-* Mozilla Firefox
+* Apache Ant [http://ant.apache.org/]
+* Apache Ivy [http://ant.apache.org/ivy/]
+* Mozilla Firefox [http://www.mozilla.org/en-US/firefox/new/]
 * A network connection
  * to download dependencies
  * to access pages under test
