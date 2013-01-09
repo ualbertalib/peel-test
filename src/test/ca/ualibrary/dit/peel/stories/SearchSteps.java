@@ -121,14 +121,12 @@ public class SearchSteps extends SeleneseTestBase {
 
     @When("user enters <query> in the form")
     public void whenUserEntersQueryInTheForm(@Named("query") String query) {
-	driver.findElement(By.xpath("(//input[@id='keywords'])[2]")).clear();
-	driver.findElement(By.xpath("(//input[@id='keywords'])[2]")).sendKeys(
-		query);
+	enterInElement(By.id("keywords"), query);
     }
 
     @When("user clicks 'search'")
     public void whenUserClicksSearch() {
-	driver.findElement(By.xpath("(//input[@id='submit'])[2]")).click();
+	driver.findElement(By.id("submit")).click();
     }
 
     @Then("title is 'Search Results'")

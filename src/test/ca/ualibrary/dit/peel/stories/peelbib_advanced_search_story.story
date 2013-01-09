@@ -3,6 +3,21 @@ In order to advance my knowledge of the prairie provinces
 As a peel visitor
 I want to search for monographs in the peel portal
 
+
+Scenario: Advanced search using most clauses
+
+Given visitor is on the 'find books' page
+When user enters McClintock, Walter in the form id authordisplay
+And user enters Life, legends, and religion of the Blackfeet Indians in the form id titledisplay
+And user enters Indians of North America--Folklore in the form id subjectdisplay
+And user enters 1870 TO 1949 in the form name pubyear
+And user enters 1910 in the form name actyear
+And user selects en in the form name language
+And user clicks 'go'
+Then title is 'Search Results'
+And hits 1
+And first result is Peel 3461
+
 Scenario: Simplest advanced search
 
 Given visitor is on the 'find books' page
@@ -70,6 +85,7 @@ And hits <hits>
 
 Examples:     
 |name|value|hits|
+|bibrecord|Alberta|0|
 |peelnum|3459|1|
 |pubyear|1945 TO 1950|839|
 |actyear|1945 TO 1950|840|
@@ -88,17 +104,3 @@ Examples:
 |language|fr|2235|
 |language|cre|197|
 |language|uk|97|
-
-Scenario: Advanced search using most clauses
-
-Given visitor is on the 'find books' page
-When user enters McClintock, Walter in the form id authordisplay
-And user enters Life, legends, and religion of the Blackfeet Indians in the form id titledisplay
-And user enters Indians of North America--Folklore in the form id subjectdisplay
-And user enters 1870 TO 1949 in the form name pubyear
-And user enters 1910 in the form name actyear
-And user selects en in the form name language
-And user clicks 'go'
-Then title is 'Search Results'
-And hits 1
-And first result is Peel 3461
