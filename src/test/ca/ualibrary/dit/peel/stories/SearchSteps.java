@@ -27,7 +27,7 @@ public class SearchSteps extends SeleneseTestBase {
     private String baseUrl;
     private Properties prop;
 
-    private static long WAIT_TIME = 3;
+    private static long WAIT_TIME = 30;
 
     @BeforeStory
     public void setUp() {
