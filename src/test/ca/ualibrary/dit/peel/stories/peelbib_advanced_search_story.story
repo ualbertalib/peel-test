@@ -15,6 +15,7 @@ And user enters 1910 in the form name actyear
 And user selects en in the form name language
 And user clicks 'go'
 Then title is 'Search Results'
+And breadcrumbs contain (Author: McClintock Author: Walter) AND (Title: Blackfeet Title: Indians Title: Life Title: and Title: legends Title: of Title: religion Title: the) AND (Subject: America Subject: Folklore Subject: Indians Subject: North Subject: of) AND (Publication year: [1870 TO 1949]) AND (Activity year: 1910) AND (Language: English)
 And hits 1
 And first result is Peel 3461
 
@@ -24,6 +25,7 @@ Given visitor is on the 'find books' page
 When user enters <keywords> in the form
 And user clicks 'go'
 Then title is 'Search Results'
+And breadcrumbs contain <keywords>
 And hits <hits>
 
 Examples:     
@@ -37,6 +39,7 @@ When user enters <keywords> in the form
 And user selects fulltext
 And user clicks 'submit' at the bottom of form
 Then title is 'Search Results'
+And breadcrumbs contain <keywords>
 And hits <hits>
 And first result is <peelbib>
 
@@ -51,6 +54,7 @@ When user enters <keywords> in the form
 And user selects <sort>
 And user clicks 'submit' at the bottom of form
 Then title is 'Search Results'
+And breadcrumbs contain <keywords>
 And hits <hits>
 And first result is <peelbib>
 
@@ -67,13 +71,14 @@ Given visitor is on the 'find books' page
 When user enters <id> <value> in the form
 And user clicks 'go'
 Then title is 'Search Results'
+And breadcrumbs contain <query>
 And hits <hits> 
 
 Examples:     
-|id|value|hits|
-|authordisplay|Morice, Adrien|37|
-|titledisplay|Manitoba and confederation|1176|
-|subjectdisplay|Immigrants--Canada|2029|
+|id|value|query|hits|
+|authordisplay|Morice, Adrien|(Author: Adrien Author: Morice)|37|
+|titledisplay|Manitoba and confederation|(Title: Manitoba Title: and Title: confederation)|1176|
+|subjectdisplay|Immigrants--Canada|(Subject: Canada Subject: Immigrants)|2029|
 
 Scenario: Advanced search only one named clause
 
@@ -81,14 +86,14 @@ Given visitor is on the 'find books' page
 When user enters <name> <value> in the form
 And user clicks 'go'
 Then title is 'Search Results'
+And breadcrumbs contain <query>
 And hits <hits> 
 
 Examples:     
-|name|value|hits|
-|bibrecord|Alberta|0|
-|peelnum|3459|1|
-|pubyear|1945 TO 1950|839|
-|actyear|1945 TO 1950|840|
+|name|value|query|hits|
+|peelnum|3459|(Peel: 003459)|1|
+|pubyear|1945 TO 1950|(Publication year: [1945 TO 1950])|839|
+|actyear|1945 TO 1950|(Activity year: [1945 TO 1950])|840|
 
 Scenario: Advanced search only one selection clause
 
@@ -96,11 +101,12 @@ Given visitor is on the 'find books' page
 When user selects <name> <value> in the form
 And user clicks 'go'
 Then title is 'Search Results'
+And breadcrumbs contain <query>
 And hits <hits> 
 
 Examples:     
-|name|value|hits|
-|language|en|8603|
-|language|fr|2235|
-|language|cre|197|
-|language|uk|97|
+|name|value|query|hits|
+|language|en|(Language: English)|8603|
+|language|fr|(Language: French)|2235|
+|language|cre|(Language: Cree)|197|
+|language|uk|(Language: Ukrainian)|97|

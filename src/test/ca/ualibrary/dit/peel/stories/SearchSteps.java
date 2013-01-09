@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Alias;
+import org.jbehave.core.annotations.Aliases;
 import org.jbehave.core.annotations.BeforeStory;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
@@ -144,6 +145,8 @@ public class SearchSteps extends SeleneseTestBase {
     }
 
     @Then("breadcrumbs contain <query>")
+    @Aliases(values = { "breadcrumbs contain <keywords>",
+	    "breadcrumbs contain $query" })
     public void thenBreadcrumbsContainQuery(@Named("query") String query) {
 	String breadcrumbsFoundExpected = "^[\\s\\S]*Query: "
 		+ Pattern.quote(query)
