@@ -3,21 +3,20 @@ In order to advance my knowledge of the prairie provinces
 As a peel visitor
 I want to search for monographs in the peel portal
 
-
 Scenario: Advanced search using most clauses
 
 Given visitor is on the 'find books' page
-When user enters McClintock, Walter in the form id authordisplay
-And user enters Life, legends, and religion of the Blackfeet Indians in the form id titledisplay
-And user enters Indians of North America--Folklore in the form id subjectdisplay
-And user enters 1870 TO 1949 in the form name pubyear
-And user enters 1910 in the form name actyear
-And user selects en in the form name language
+When user enters Hunter, James in the form id author
+And user enters Book of Common Prayer in the form id title
+And user enters Indians of North America--Languages in the form id subject
+And user enters 1850 TO 1860 in the form name pubyear
+And user enters 1856 in the form name actyear
+And user selects cre in the form name language
 And user clicks 'go'
 Then title is 'Search Results'
-And breadcrumbs contain (Author: McClintock Author: Walter) AND (Title: Blackfeet Title: Indians Title: Life Title: and Title: legends Title: of Title: religion Title: the) AND (Subject: America Subject: Folklore Subject: Indians Subject: North Subject: of) AND (Publication year: [1870 TO 1949]) AND (Activity year: 1910) AND (Language: English)
+And breadcrumbs contain Title: Book of Common Prayer AND Publication year: [1850 TO 1860] AND Language: Cree AND Activity year: 1856 AND Subject: Indians of North America--Languages AND Author: Hunter, James
 And hits 1
-And first result is Peel 3461
+And first result is Peel 329
 
 Scenario: Simplest advanced search
 
@@ -30,7 +29,7 @@ And hits <hits>
 
 Examples:     
 |keywords|hits|
-|horse|2741|
+|horse|262|
 
 Scenario: Advanced search with keyword and status
 
@@ -45,7 +44,7 @@ And first result is <peelbib>
 
 Examples:     
 |keywords|hits|peelbib|
-|horse|2443|Peel 9204|
+|languages|51|Peel 9021.15.1|
 
 Scenario: Advanced search with keyword and sort
 
@@ -60,10 +59,14 @@ And first result is <peelbib>
 
 Examples:     
 |keywords|sort|hits|peelbib|
-|horse|sort-score|2741|Peel 9204|
-|horse|sort-peelnum|2741|Peel 6|
-|horse|sort-pubyear-asc|2741|Peel 10243|
-|horse|sort-pubyear-desc|2741|Peel 10452|
+|languages|sort-score|51|Peel 2490|
+|languages|sort-peelnum|51|Peel 315|
+|languages|sort-pubyear-asc|51|Peel 9021.Index.1953-1977|
+|languages|sort-pubyear-desc|51|Peel 10571.71|
+|languages|sort-author-asc|51|Peel 9021.24.2|
+|languages|sort-author-desc|51|Peel 10571.35|
+|languages|sort-title-asc|51|Peel 9021.24.2|
+|languages|sort-title-desc|51|Peel 10571.35|
 
 Scenario: Advanced search only one id clause
 
@@ -76,9 +79,9 @@ And hits <hits>
 
 Examples:     
 |id|value|query|hits|
-|authordisplay|Morice, Adrien|(Author: Adrien Author: Morice)|37|
-|titledisplay|Manitoba and confederation|(Title: Manitoba Title: and Title: confederation)|1176|
-|subjectdisplay|Immigrants--Canada|(Subject: Canada Subject: Immigrants)|2029|
+|author|Hunter, James|Author: Hunter, James|21|
+|title|Book of Common Prayer|Title: Book of Common Prayer|4|
+|subject|Indians of North America--Languages|Subject: Indians of North America--Languages|4|
 
 Scenario: Advanced search only one named clause
 
@@ -91,9 +94,9 @@ And hits <hits>
 
 Examples:     
 |name|value|query|hits|
-|peelnum|3459|(Peel: 003459)|1|
-|pubyear|1945 TO 1950|(Publication year: [1945 TO 1950])|839|
-|actyear|1945 TO 1950|(Activity year: [1945 TO 1950])|840|
+|peelnum|329|Peel: 329|1|
+|pubyear|1850 TO 1860|Publication year: [1850 TO 1860]|2|
+|actyear|1900 TO 1920|Activity year: [1900 TO 1920]|4|
 
 Scenario: Advanced search only one selection clause
 
@@ -106,7 +109,7 @@ And hits <hits>
 
 Examples:     
 |name|value|query|hits|
-|language|en|(Language: English)|8603|
-|language|fr|(Language: French)|2235|
-|language|cre|(Language: Cree)|197|
-|language|uk|(Language: Ukrainian)|97|
+|language|en|Language: English|283|
+|language|fr|Language: French|2|
+|language|cre|Language: Cree|3|
+|language|uk|Language: Ukrainian|2|
