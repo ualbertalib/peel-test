@@ -21,52 +21,53 @@ And first result is Peel 329
 Scenario: Simplest advanced search
 
 Given visitor is on the 'find books' page
-When user enters <keywords> in the form
+When user enters <query> in the form
 And user clicks 'go'
 Then title is 'Search Results'
-And breadcrumbs contain <keywords>
+And breadcrumbs contain <query>
 And hits <hits>
 
 Examples:     
-|keywords|hits|
+|query|hits|
 |horse|262|
 
 Scenario: Advanced search with keyword and status
 
 Given visitor is on the 'find books' page
-When user enters <keywords> in the form
+When user enters <query> in the form
 And user selects fulltext
 And user clicks 'submit' at the bottom of form
 Then title is 'Search Results'
-And breadcrumbs contain <keywords>
+And breadcrumbs contain <query>
 And hits <hits>
 And first result is <peelbib>
 
 Examples:     
-|keywords|hits|peelbib|
+|query|hits|peelbib|
 |languages|51|Peel 9021.15.1|
 
 Scenario: Advanced search with keyword and sort
 
 Given visitor is on the 'find books' page
-When user enters <keywords> in the form
+When user enters <query> in the form
 And user selects <sort>
 And user clicks 'submit' at the bottom of form
 Then title is 'Search Results'
-And breadcrumbs contain <keywords>
+And breadcrumbs contain <query>
 And hits <hits>
+And results are sorted by <sort>
 And first result is <peelbib>
 
 Examples:     
-|keywords|sort|hits|peelbib|
-|languages|sort-score|51|Peel 2490|
-|languages|sort-peelnum|51|Peel 315|
-|languages|sort-pubyear-asc|51|Peel 9021.Index.1953-1977|
-|languages|sort-pubyear-desc|51|Peel 10571.71|
-|languages|sort-author-asc|51|Peel 9021.24.2|
-|languages|sort-author-desc|51|Peel 10571.35|
-|languages|sort-title-asc|51|Peel 9021.24.2|
-|languages|sort-title-desc|51|Peel 10571.35|
+|query|sort|hits|peelbib|
+|horse|sort-score|262|Peel 2490|
+|horse|sort-peelnum|262|Peel 2490|
+|horse|sort-pubyear-asc|262|Peel 9021.Index.1953-1977|
+|horse|sort-pubyear-desc|262|Peel 10571.73|
+|horse|sort-author-asc|262|Peel 9021.52.4|
+|horse|sort-author-desc|262|Peel 10571.64|
+|horse|sort-title-asc|262|Peel 9021.52.4|
+|horse|sort-title-desc|262|Peel 2490|
 
 Scenario: Advanced search only one id clause
 

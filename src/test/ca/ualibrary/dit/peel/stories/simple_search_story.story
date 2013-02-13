@@ -1,7 +1,7 @@
 Narrative:
 In order to advance my knowledge of the prairie provinces 
 As a peel visitor
-I want to search the peel portal
+I want to search for peel resources
 
 Scenario: Simple search from front page newspaper index
 
