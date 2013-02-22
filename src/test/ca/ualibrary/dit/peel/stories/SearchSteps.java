@@ -77,6 +77,19 @@ public class SearchSteps extends SeleneseTestBase {
 		assertEquals("Advanced Search", driver.getTitle());
 	}
 
+	@Given("visitor is on the 'find newspapers advanced search' page")
+	public void givenVisitorIsOnTheFindNewspapersAdvancedSearchPage() {
+		driver.get(baseUrl + "/index.html");
+		assertEquals(
+				"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
+				driver.getTitle());
+		driver.findElement(By.cssSelector("a.tab5")).click();
+		assertEquals("Newspapers", driver.getTitle());
+		driver.findElement(By.cssSelector("a.advanced"))
+				.click();
+		assertEquals("Newspapers", driver.getTitle());
+	}
+
 	@When("user enters <id> <value> in the form")
 	@Alias("user enters $value in the form id $id")
 	public void whenUserEntersIdValueInTheForm(@Named("id") String id,

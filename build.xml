@@ -45,7 +45,7 @@
     <target name="test-stories" depends="compile">
         <mkdir dir="${target.report.dir}"/>
         
-        <junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="yes">
+        <junit printsummary="yes" failureproperty="junit.failure" fork="yes">
             <jvmarg value="-Dfile.encoding=UTF-8"/>
             <batchtest todir="${target.report.dir}">
                 <fileset dir="${src.test.dir}">
@@ -59,6 +59,8 @@
                 <path refid="test.path"/>
             </classpath>
         </junit>
+    	
+    	<fail if="junit.failure" message="Test(s) failed.  See reports!"/>
     </target>
     
     <target name="report" depends="test">
