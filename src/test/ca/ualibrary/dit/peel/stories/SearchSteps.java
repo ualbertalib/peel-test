@@ -1,6 +1,9 @@
 package ca.ualibrary.dit.peel.stories;
 
 import java.io.FileInputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -134,11 +137,19 @@ public class SearchSteps extends SeleneseTestBase {
 		driver.findElement(By.id("submit2")).click();
 	}
 
+	@When("peelbib user selects <sort>")
+	public void whenPeelbibUserSelectsSort(@Named("sort") String sort) {
+		// TODO why do I have to control status-any (or something else) before
+		// setting the sort?
+		driver.findElement(By.id("status-any")).click();
+
+		driver.findElement(By.id(sort)).click();
+	}
+	
 	@When("user selects <sort>")
 	public void whenUserSelectsSort(@Named("sort") String sort) {
 		// TODO why do I have to control status-any (or something else) before
 		// setting the sort?
-		driver.findElement(By.id("status-any")).click();
 		driver.findElement(By.id(sort)).click();
 	}
 
@@ -207,26 +218,103 @@ public class SearchSteps extends SeleneseTestBase {
 		}
 	}
 
+	@Then("first newspaper result is <title>")
+	public void thenFirstNewspaperResultIsTitle(@Named("title") String title) {
+		if (isSample) {
+			String firstResultExpected = title;
+			String firstResultActual = driver.findElement(
+					By.xpath("//li[@class='result'][@value=1]/dl/dt"))
+					.getText();
+			assertTrue("'" + firstResultActual + "' should match '"
+					+ firstResultExpected + "'",
+					firstResultActual.matches(firstResultExpected));
+		}
+	}
+
 	@Then("results are sorted by <sort>")
-	public void thenResultsAreSortedBySort(@Named("sort") String sortString) {
+	public void thenResultsAreSortedBySort(@Named("sort") String sortString)
+			throws ParseException {
 		WebElement firstResult = driver.findElement(By
 				.xpath("//li[@class='result'][@value=1]"));
 		WebElement secondResult = driver.findElement(By
 				.xpath("//li[@class='result'][@value=2]"));
-		String author1 = firstResult.findElement(
-				By.xpath("dl/dd[@class='by']")).getText();
+		Sorts sort = Sorts.valueOf(sortString.toLowerCase()
+				.replace("sort-", "").replace("sort_", "")
+				.replace("-", "_"));
+		switch (sort) {
+		case peelnum:
+			assertPeelnumOrder(firstResult, secondResult);
+			break;
+		case pubyear_asc:
+			assertPubyearOrder(firstResult, secondResult);
+			break;
+		case pubyear_desc:
+			assertPubyearOrder(secondResult, firstResult);
+			break;
+		case author_asc:
+			assertAuthorOrder(firstResult, secondResult);
+			break;
+		case author_desc:
+			assertAuthorOrder(secondResult, firstResult);
+			break;
+		case title_asc:
+			assertTitleOrder(firstResult, secondResult);
+			break;
+		case title_desc:
+			assertTitleOrder(secondResult, firstResult);
+			break;
+		case date_asc:
+			assertDateOrder(firstResult, secondResult);
+			break;
+		case date_desc:
+			assertDateOrder(secondResult, firstResult);
+			break;
+		case score:
+			// TODO: can't be tested?
+		default:
+			break;
+		}
+	}
+
+	private void assertDateOrder(WebElement firstResult, WebElement secondResult)
+			throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("MMMMM dd, yyyy");
+		String[] split = firstResult.findElement(By.xpath("dl/dt")).getText()
+				.split(", ");
+		Date date1 = format.parse(split[1] + ", " + split[2]);
+		split = secondResult.findElement(By.xpath("dl/dt")).getText()
+				.split(", ");
+		Date date2 = format.parse(split[1] + ", " + split[2]);
+		assertTrue(date1.toString() + " should be before " + date2.toString(),
+				date1.compareTo(date2) <= 0);
+	}
+
+	private void assertTitleOrder(WebElement firstResult,
+			WebElement secondResult) {
+		String title1 = firstResult.findElement(By.xpath("dl/dt")).getText()
+				.replaceFirst("^.*[0-9]:", "").replaceFirst("(The|A)", "");
+		String title2 = secondResult.findElement(By.xpath("dl/dt")).getText()
+				.replaceFirst("^.*[0-9]:", "").replaceFirst("(The|A)", "");
+		assertTrue(title1 + " should be before " + title2,
+				title1.compareTo(title2) <= 0);
+	}
+
+	private void assertAuthorOrder(WebElement firstResult,
+			WebElement secondResult) {
+		String author1 = firstResult
+				.findElement(By.xpath("dl/dd[@class='by']")).getText();
 		author1 = author1.substring(author1.lastIndexOf("Author"),
 				author1.indexOf("."));
 		String author2 = secondResult.findElement(
 				By.xpath("dl/dd[@class='by']")).getText();
 		author2 = author2.substring(author2.lastIndexOf("Author"),
 				author2.indexOf("."));
-		String title1 = firstResult.findElement(By.xpath("dl/dt"))
-.getText()
-				.replaceFirst("^.*[0-9]:", "").replaceFirst("(The|A)", "");
-		String title2 = secondResult.findElement(By.xpath("dl/dt"))
-.getText()
-				.replaceFirst("^.*[0-9]:", "").replaceFirst("(The|A)", "");
+		assertTrue(author1 + " should be before " + author2,
+				author1.compareTo(author2) <= 0);
+	}
+
+	private void assertPubyearOrder(WebElement firstResult,
+			WebElement secondResult) {
 		String pubyear1 = firstResult
 				.findElement(By.xpath("dl/dd[@class='info']")).getText().trim();
 		int sample = pubyear1.length() < 6 ? pubyear1.length() : 6;
@@ -237,50 +325,19 @@ public class SearchSteps extends SeleneseTestBase {
 		sample = pubyear2.length() < 6 ? pubyear2.length() : 6;
 		pubyear2 = pubyear2.substring(pubyear2.length() - sample).replaceAll(
 				"[^0-9]*", "");
+		if (!"".equals(pubyear1) && !"".equals(pubyear2))
+			assertTrue(pubyear1 + " should be before " + pubyear2,
+					pubyear1.compareTo(pubyear2) <= 0);
+	}
 
-		Sorts sort = Sorts.valueOf(sortString.toLowerCase()
-				.replace("sort-", "")
-				.replace("-", "_"));
-		switch (sort) {
-		case peelnum:
-			String peelnum1 = firstResult.findElement(By.xpath("dl/dt/a"))
-					.getText();
-			String peelnum2 = secondResult.findElement(By.xpath("dl/dt/a"))
-					.getText();
-			assertTrue(peelnum1 + " should be before " + peelnum2,
-					peelnum1.compareTo(peelnum2) < 0);
-			break;
-		case pubyear_asc:
-			if (!"".equals(pubyear1) && !"".equals(pubyear2))
-				assertTrue(pubyear1 + " should be before " + pubyear2,
-						pubyear1.compareTo(pubyear2) <= 0);
-			break;
-		case pubyear_desc:
-			if (!"".equals(pubyear1) && !"".equals(pubyear2))
-				assertTrue(pubyear2 + " should be before " + pubyear1,
-						pubyear2.compareTo(pubyear1) <= 0);
-			break;
-		case author_asc:
-			assertTrue(author1 + " should be before " + author2,
-					author1.compareTo(author2) <= 0);
-			break;
-		case author_desc:
-			assertTrue(author2 + " should be before " + author1,
-					author2.compareTo(author1) <= 0);
-			break;
-		case title_asc:
-			assertTrue(title1 + " should be before " + title2,
-					title1.compareTo(title2) <= 0);
-			break;
-		case title_desc:
-			assertTrue(title2 + " should be before " + title1,
-					title2.compareTo(title1) <= 0);
-			break;
-		case score:
-			// TODO: can't be tested?
-		default:
-			break;
-		}
+	private void assertPeelnumOrder(WebElement firstResult,
+			WebElement secondResult) {
+		String peelnum1 = firstResult.findElement(By.xpath("dl/dt/a"))
+				.getText();
+		String peelnum2 = secondResult.findElement(By.xpath("dl/dt/a"))
+				.getText();
+		assertTrue(peelnum1 + " should be before " + peelnum2,
+				peelnum1.compareTo(peelnum2) < 0);
 	}
 
 	public enum Sorts {
@@ -291,6 +348,8 @@ public class SearchSteps extends SeleneseTestBase {
 		author_asc, 
 		author_desc, 
 		title_asc, 
-		title_desc
+		title_desc,
+		date_asc,
+		date_desc
 	}
 }

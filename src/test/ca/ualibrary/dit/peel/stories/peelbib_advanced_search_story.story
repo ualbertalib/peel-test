@@ -50,7 +50,7 @@ Scenario: Advanced search with keyword and sort
 
 Given visitor is on the 'find books' page
 When user enters <query> in the form
-And user selects <sort>
+And peelbib user selects <sort>
 And user clicks 'submit' at the bottom of form
 Then title is 'Search Results'
 And breadcrumbs contain <query>
