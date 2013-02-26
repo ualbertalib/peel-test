@@ -27,13 +27,13 @@ import com.thoughtworks.selenium.SeleneseTestBase;
 
 public class SearchSteps extends SeleneseTestBase {
 
-	private WebDriver driver;;
-	private String baseUrl;
+	protected WebDriver driver;;
+	protected String baseUrl;
 	private Properties prop;
-	private boolean isSample;
+	protected boolean isSample;
 	private static String PEEL_SOLR_SAMPLE = "peel-solr";
 
-	private static long WAIT_TIME = 30;
+	protected static long WAIT_TIME = 30;
 
 	@BeforeStory
 	public void setUp() {
@@ -83,13 +83,16 @@ public class SearchSteps extends SeleneseTestBase {
 	@Given("visitor is on the 'find newspapers advanced search' page")
 	public void givenVisitorIsOnTheFindNewspapersAdvancedSearchPage() {
 		driver.get(baseUrl + "/index.html");
+		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 		assertEquals(
 				"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
 				driver.getTitle());
 		driver.findElement(By.cssSelector("a.tab5")).click();
+		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 		assertEquals("Newspapers", driver.getTitle());
 		driver.findElement(By.cssSelector("a.advanced"))
 				.click();
+		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 		assertEquals("Newspapers", driver.getTitle());
 	}
 
@@ -148,8 +151,6 @@ public class SearchSteps extends SeleneseTestBase {
 	
 	@When("user selects <sort>")
 	public void whenUserSelectsSort(@Named("sort") String sort) {
-		// TODO why do I have to control status-any (or something else) before
-		// setting the sort?
 		driver.findElement(By.id(sort)).click();
 	}
 
@@ -166,6 +167,16 @@ public class SearchSteps extends SeleneseTestBase {
 	@When("user clicks 'search'")
 	public void whenUserClicksSearch() {
 		driver.findElement(By.id("submit")).click();
+	}
+
+	@When("user checks id $type")
+	public void whenUserChecksIdType(@Named("type") String type) {
+		driver.findElement(By.id(type)).click();
+	}
+
+	@When("user checks name $size")
+	public void whenUserChecksNameSize(@Named("size") String size) {
+		driver.findElement(By.name(size)).click();
 	}
 
 	@Then("title is 'Search Results'")

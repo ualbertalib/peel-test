@@ -10,7 +10,7 @@ When user enters 1913 in the form name pubyear
 And user selects fr in the form name language
 And user clicks 'go'
 Then title is 'Search Results'
-And breadcrumbs contain Publication year: 1913 AND Language: French AND Item size: large OR medium OR xlarge OR small AND Item type: ad OR picture OR article
+And breadcrumbs contain Publication year: 1913 AND Language: French
 And hits 15
 
 Scenario: Simplest advanced search
@@ -43,3 +43,103 @@ Examples:
 |alberta|sort_score|18|The Gateway, November 9, 1934, p.3, Ar00311|
 |alberta|sort_date-asc|18|The Calgary Eye-Opener, October 3, 1908, p.3, Ad00305_2|
 |alberta|sort_date-desc|18|La Liberté et le patriote, August 10, 1956, p.6, Ar00610|
+
+Scenario: Advanced search with all size and type
+Given visitor is on the 'find newspapers advanced search' page
+When user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain <query>
+And hits <hits>
+
+Examples:
+|query|hits|
+||299|
+
+Scenario: Advanced search with none type
+Given visitor is on the 'find newspapers advanced search' page
+When user checks id newspapers_type_article
+And user checks id newspapers_type_ad
+And user checks id newspapers_type_picture
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item size: large OR medium OR xlarge OR small
+And hits 323
+
+
+Scenario: Advanced search with picture type
+Given visitor is on the 'find newspapers advanced search' page
+When user checks id newspapers_type_article
+And user checks id newspapers_type_ad
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item size: large OR medium OR xlarge OR small & Item type: picture
+And hits 13
+
+Scenario: Advanced search with ad type
+Given visitor is on the 'find newspapers advanced search' page
+When user checks id newspapers_type_article
+And user checks id newspapers_type_picture
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item size: large OR medium OR xlarge OR small & Item type: ad
+And hits 93
+
+Scenario: Advanced search with article type
+Given visitor is on the 'find newspapers advanced search' page
+When user checks id newspapers_type_ad
+And user checks id newspapers_type_picture
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item size: large OR medium OR xlarge OR small & Item type: article
+And hits 193
+
+Scenario: Advanced search with none size
+Given visitor is on the 'find newspapers advanced search' page
+When user checks name newspapers_size_xlarge
+And user checks name newspapers_size_large
+And user checks name newspapers_size_medium
+And user checks name newspapers_size_small
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item type: ad OR picture OR article
+And hits 299
+
+Scenario: Advanced search with small size
+Given visitor is on the 'find newspapers advanced search' page
+When user checks name newspapers_size_xlarge
+And user checks name newspapers_size_large
+And user checks name newspapers_size_medium
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item size: small & Item type: ad OR picture OR article
+And hits 255
+
+Scenario: Advanced search with medium size
+Given visitor is on the 'find newspapers advanced search' page
+When user checks name newspapers_size_xlarge
+And user checks name newspapers_size_large
+And user checks name newspapers_size_small
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item size: medium & Item type: ad OR picture OR article
+And hits 24
+
+Scenario: Advanced search with large size
+Given visitor is on the 'find newspapers advanced search' page
+When user checks name newspapers_size_xlarge
+And user checks name newspapers_size_medium
+And user checks name newspapers_size_small
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item size: large & Item type: ad OR picture OR article
+And hits 14
+
+Scenario: Advanced search with xlarge size
+Given visitor is on the 'find newspapers advanced search' page
+When user checks name newspapers_size_large
+And user checks name newspapers_size_medium
+And user checks name newspapers_size_small
+And user clicks 'submit' at the bottom of form
+Then title is 'Search Results'
+And breadcrumbs contain Item size: xlarge & Item type: ad OR picture OR article
+And hits 6
