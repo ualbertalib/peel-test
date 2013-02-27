@@ -35,3 +35,35 @@ When user selects random range of publication
 Then random range match hits
 And random range match breadcrumbs
 And results have publication in random range
+
+Scenario: Modify search by first Language
+Given visitor is on a newspapers results page for 'alberta'
+When user selects first language
+Then first language match hits
+And first language match breadcrumbs
+And results have first language
+
+Scenario: Modify search by last Language
+Given visitor is on a newspapers results page for 'alberta'
+When user selects last language
+Then last language match hits
+And last language match breadcrumbs
+And results have last language
+
+Scenario: Modify search by first Publication
+Given visitor is on a newspapers results page for 'alberta'
+When user selects publication first 
+Then first publication match hits
+And results have first publication
+
+Scenario: Modify search by last Publication
+Given visitor is on a newspapers results page for 'alberta'
+When user selects publication last 
+Then last publication match hits
+And results have last publication
+
+Scenario: Modify search by random Publication
+Given visitor is on a newspapers results page for 'alberta'
+When user selects publication random 
+Then random publication match hits
+And results have random publication

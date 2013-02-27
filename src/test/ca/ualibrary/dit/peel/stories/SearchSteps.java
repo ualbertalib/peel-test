@@ -243,6 +243,7 @@ public class SearchSteps extends SeleneseTestBase {
 	}
 
 	@Then("results are sorted by <sort>")
+	@Alias("results are sorted by $sort")
 	public void thenResultsAreSortedBySort(@Named("sort") String sortString)
 			throws ParseException {
 		WebElement firstResult = driver.findElement(By

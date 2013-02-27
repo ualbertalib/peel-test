@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
@@ -28,7 +29,8 @@ public class FacetSteps extends SearchSteps {
 		assertEquals("Search Results", driver.getTitle());
 	}
 
-	@When("user clicks on <display-sort>")
+	@When("user clicks on $display-sort")
+	@Alias("user clicks on <display-sort>")
 	public void whenUserClicksOnSort(@Named("display-sort") String sort) {
 		List<WebElement> facets = driver.findElements(By
 				.xpath("//*[@id=\"subCol\"]/div[1]/ul/li/a"));
@@ -37,18 +39,35 @@ public class FacetSteps extends SearchSteps {
 		driver.findElement(By.linkText(sort)).click();
 	}
 
+	@When("user selects publication $position")
+	public void whenUserSelectsPublication(
+			@Named("position") String position) {
+		selectFacet(position, "//*[@id=\"subCol\"]/div[4]/ul/li/a",
+				"h4#newspapers-block");
+	}
+
+	@When("user selects $position language")
+	public void whenUserSelectsFirstLangauge(@Named("position") String position) {
+		selectFacet(position, "//*[@id=\"subCol\"]/div[3]/ul/li/a",
+				"h4#languages-block");
+	}
 	@When("user selects $range range of publication")
 	public void whenUserSelectsRangeOfPublication(@Named("range") String range) {
-		List<WebElement> facets = driver.findElements(By
-				.xpath("//*[@id=\"subCol\"]/div[2]/ul/li/a"));
+		selectFacet(range, "//*[@id=\"subCol\"]/div[2]/ul/li/a",
+				"h4#years-in-publication");
+	}
+
+	private void selectFacet(String position, String xpath,
+			String cssSelectFacet) {
+		List<WebElement> facets = driver.findElements(By.xpath(xpath));
 		if (!facets.get(0).isDisplayed()) {
-			driver.findElement(By.cssSelector("h4#years-in-publication"))
+			driver.findElement(By.cssSelector(cssSelectFacet))
 					.click();
 		}
 		WebElement facet = null;
-		if( "first".equals( range ) )
+		if ("first".equals(position))
 			facet = facets.get(0);
-		else if ( "last".equals( range) )
+		else if ("last".equals(position))
 			facet = facets.get(facets.size() - 1);
 		else {
 			Random rand = new Random();
@@ -96,6 +115,33 @@ public class FacetSteps extends SearchSteps {
 		assertTrue("should be in range", upperDate.compareTo(date) >= 0);
 	}
 
+	@Then("results have $position language")
+	public void thenResultsHaveLanguage() {
+		String resultLanguageExpected = facetText.substring(0,
+				facetText.indexOf(":"));
+		String resultLanguageActual = driver.findElement(
+				By.xpath("//li[@class='result'][@value=1]/dl/dd[@class='by']"))
+				.getText();
+		resultLanguageActual = resultLanguageActual
+				.substring(resultLanguageActual.indexOf("Language: ")
+						+ "Language: ".length());
+		assertTrue("'" + resultLanguageActual + "' should match '"
+				+ resultLanguageExpected + "'",
+				resultLanguageActual.matches(resultLanguageExpected));
+	}
+
+	@Then("results have $position publication")
+	public void thenResultsHavePublication() {
+		String resultPublicationExpected = facetText.substring(0,
+				facetText.indexOf(":"));
+		String resultPublicationActual = driver.findElement(
+				By.xpath("//li[@class='result'][@value=1]/dl/dt/cite/em"))
+				.getText();
+		assertTrue("'" + resultPublicationActual + "' should match '"
+				+ resultPublicationExpected + "'",
+				resultPublicationActual.matches(resultPublicationExpected));
+	}
+
 	@Then("$facet match hits")
 	public void thenFacetMatchHits() {
 		String hits = facetText.substring(facetText.indexOf(": ") + 2,
@@ -104,6 +150,7 @@ public class FacetSteps extends SearchSteps {
 	}
 
 	@Then("<display-sort> is fixed")
+	@Alias("$display-sort is fixed")
 	public void thensortIsFixed(@Named("display-sort") String sort) {
 		assertEquals(sort, driver.findElement(By.cssSelector("strong"))
 				.getText());
