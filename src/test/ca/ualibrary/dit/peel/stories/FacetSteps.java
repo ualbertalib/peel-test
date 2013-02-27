@@ -29,6 +29,14 @@ public class FacetSteps extends SearchSteps {
 		assertEquals("Search Results", driver.getTitle());
 	}
 
+	@Given("visitor is on a peelbib results page for 'alberta'")
+	public void givenVisitorIsOnAPeelbibResultsPageForalberta() {
+		driver.get(baseUrl
+				+ "search/?search=raw&pageNumber=1&field=body&rawQuery=alberta&index=peelbib");
+		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+		assertEquals("Search Results", driver.getTitle());
+	}
+
 	@When("user clicks on $display-sort")
 	@Alias("user clicks on <display-sort>")
 	public void whenUserClicksOnSort(@Named("display-sort") String sort) {
@@ -96,8 +104,9 @@ public class FacetSteps extends SearchSteps {
 		}
 	}
 
-	@Then("results have publication in $range range")
-	public void thenResultsHavePublicationInRange() throws ParseException {
+	@Then("results have newspaper years of publication in $range range")
+	public void thenResultsHaveNewspaperPublicationInRange()
+			throws ParseException {
 		SimpleDateFormat formatFacet = new SimpleDateFormat("yyyy");
 		String[] dates = facetText.substring(0, facetText.indexOf(":")).split(
 				" \\p{Pd} ");
@@ -113,6 +122,24 @@ public class FacetSteps extends SearchSteps {
 
 		assertTrue("should be in range", lowerDate.compareTo(date) <= 0);
 		assertTrue("should be in range", upperDate.compareTo(date) >= 0);
+	}
+
+	@Then("results have peelbib years of publication in $range range")
+	public void thenResultsHavePeelbibYearsOfPublicationInRandomRange()
+			throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy");
+		String[] dates = facetText.substring(0, facetText.indexOf(":")).split(
+				" \\p{Pd} ");
+		Date lowerDate = format.parse(dates[0]);
+		Date upperDate = format.parse(dates[1]);
+
+		WebElement firstResult = driver.findElement(By
+				.xpath("//li[@class='result'][@value=1]"));
+		String pubyear1 = firstResult
+				.findElement(By.xpath("dl/dd[@class='info']")).getText().trim();
+		int sample = pubyear1.length() < 6 ? pubyear1.length() : 6;
+		Date date = format.parse(pubyear1.substring(
+				pubyear1.length() - sample).replaceAll("[^0-9]*", ""));
 	}
 
 	@Then("results have $position language")
@@ -144,8 +171,9 @@ public class FacetSteps extends SearchSteps {
 
 	@Then("$facet match hits")
 	public void thenFacetMatchHits() {
+		String suffix = facetText.endsWith("hits") ? " hits" : " hit";
 		String hits = facetText.substring(facetText.indexOf(": ") + 2,
-				facetText.indexOf(" hits"));
+				facetText.indexOf(suffix));
 		thenHitsEquals( hits );
 	}
 
