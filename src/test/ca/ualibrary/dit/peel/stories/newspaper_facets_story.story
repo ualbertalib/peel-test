@@ -19,33 +19,33 @@ Scenario: Modify search by first Years of Publication
 Given visitor is on a newspapers results page for 'alberta'
 When user selects first range of publication
 Then first range match hits
-And first range match breadcrumbs
+And first range match breadcrumbs year
 And results have newspaper years of publication in first range
 
 Scenario: Modify search by last Years of Publication
 Given visitor is on a newspapers results page for 'alberta'
 When user selects last range of publication
 Then last range match hits
-And last range match breadcrumbs
+And last range match breadcrumbs year
 And results have newspaper years of publication in last range
 
 Scenario: Modify search by random Years of Publication
 Given visitor is on a newspapers results page for 'alberta'
 When user selects random range of publication
 Then random range match hits
-And random range match breadcrumbs
+And random range match breadcrumbs year
 And results have newspaper years of publication in random range
 
 Scenario: Modify search by first Language
 Given visitor is on a newspapers results page for 'alberta'
-When user selects first language
+When user selects newspaper first language
 Then first language match hits
 And first language match breadcrumbs
 And results have first language
 
 Scenario: Modify search by last Language
 Given visitor is on a newspapers results page for 'alberta'
-When user selects last language
+When user selects newspaper last language
 Then last language match hits
 And last language match breadcrumbs
 And results have last language
