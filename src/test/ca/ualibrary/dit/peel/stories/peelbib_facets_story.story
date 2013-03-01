@@ -40,6 +40,12 @@ When user selects random range of publication
 Then random range match breadcrumbs year
 And results have peelbib years of publication in random range
 
+Scenario: Modify search by google map
+Given visitor is on a peelbib results page for 'canada'
+When user selects location on map
+Then location match hits
+And location match breadcrumbs
+
 Scenario: Modify search by first Language
 Given visitor is on a peelbib results page for 'canada'
 When user selects peelbib first language

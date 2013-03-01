@@ -38,6 +38,18 @@ public class FacetSteps extends SearchSteps {
 		assertEquals("Search Results", driver.getTitle());
 	}
 
+	@When("user selects location on map")
+	public void whenUserSelectsEdmontonAlberta1Hit() {
+		driver.findElement(By.id("map-tool")).click();
+		driver.findElement(By.id("mtgt_unnamed_0")).click();
+		WebElement location = driver.findElement(By.linkText("Search"));
+		WebElement parent = location.findElement(By.xpath(".."));
+		facetText = parent.getText();
+		facetHits = facetText.replaceAll("[^0-9]", "");
+		facetText = facetText.substring(0, facetText.indexOf("(")).trim();
+		location.click();
+	}
+
 	@When("user clicks on $display-sort")
 	@Alias("user clicks on <display-sort>")
 	public void whenUserClicksOnSort(@Named("display-sort") String sort) {
