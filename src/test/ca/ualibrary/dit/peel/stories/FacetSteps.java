@@ -15,6 +15,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.pagefactory.ByChained;
 
 public class FacetSteps extends SearchSteps {
 
@@ -36,6 +37,32 @@ public class FacetSteps extends SearchSteps {
 				+ "search/?search=raw&pageNumber=1&field=body&rawQuery=canada&index=peelbib");
 		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 		assertEquals("Search Results", driver.getTitle());
+	}
+
+	@Given("visitor is on the browse page")
+	public void givenVisitorIsOnTheBrowsePage() {
+		driver.get(baseUrl + "browse/");
+		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+		assertEquals("Browse Peel Bibliography", driver.getTitle());
+	}
+
+	@Given("visitor is on the <category> page")
+	public void givenVisitorIsOnTheCategoryPage(
+			@Named("category") String category) {
+		driver.get(baseUrl + "browse/" + category + "/");
+		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+	}
+
+	@When("user enters $prefix in the $categoryType searchbox")
+	@Alias("user enters $prefix in the <categoryType> searchbox")
+	public void whenUserEntersPrefixInTheSearchbox(
+			@Named("prefix") String prefix,
+			@Named("categoryType") String categoryType) {
+		driver.findElement(By.id(categoryType)).clear();
+		WebElement element = driver.findElement(By.id(categoryType));
+		element.sendKeys(prefix);
+		element.findElement(new ByChained(By.xpath(".."), By.name("submit")))
+				.click();
 	}
 
 	@When("user selects location on map")
@@ -118,6 +145,39 @@ public class FacetSteps extends SearchSteps {
 		facet.findElement(By.xpath("th/a")).click();
 	}
 
+	@When("user clicks <position> entry")
+	public void whenUserClicksPositionEntry(@Named("position") String position) {
+		List<WebElement> facets = driver
+				.findElements(By
+				.xpath("//*[@id=\"mainCol\"]/div/ul/li/a"));
+		WebElement facet = selectPositionInCategory(position, facets);
+		facetText = facet.findElement(By.xpath("..")).getText();
+		facet.click();
+		facetHits = facetText.replaceAll("(^.*\\()*( hit(s)*\\)$)*", "");
+		facetText = facetText.substring(0, facetText.indexOf("(")).trim();
+	}
+
+	@When("user clicks <position> entry of <category>")
+	public void whenUserClicksEntryOfCategory(
+			@Named("position") String position,
+			@Named("category") String category) {
+		int catIndex = 0;
+		if ("author".equals(category))
+			catIndex = 1;
+		else if ("title".equals(category))
+			catIndex = 2;
+		else if ("subject".equals(category))
+			catIndex = 3;
+		List<WebElement> facets = driver.findElements(By
+				.xpath("//*[@id=\"mainCol\"]/div[" + catIndex + "]/ul/li/a"));
+		WebElement facet = selectPositionInCategory(position, facets);
+		facetText = facet.findElement(By.xpath("..")).getText();
+		facet.click();
+		facetHits = facetText.replaceAll("(^.*\\()*( hit(s)*\\)$)*", "");
+		facetText = facetText.substring(0, facetText.indexOf("(")).trim();
+
+	}
+
 	private void selectFacet(String position, String xpath,
 			String cssSelectFacet) {
 		List<WebElement> facets = driver.findElements(By.xpath(xpath));
@@ -125,6 +185,19 @@ public class FacetSteps extends SearchSteps {
 			driver.findElement(By.cssSelector(cssSelectFacet))
 					.click();
 		}
+		WebElement facet = selectPositionInCategory(position, facets);
+
+		facetText = facet.getText();
+		facet.click();
+
+		String suffix = facetText.endsWith("hits") ? " hits" : " hit";
+		facetHits = facetText.substring(facetText.indexOf(": ") + 2,
+				facetText.indexOf(suffix));
+		facetText = facetText.substring(0, facetText.indexOf(":"));
+	}
+
+	private WebElement selectPositionInCategory(String position,
+			List<WebElement> facets) {
 		WebElement facet = null;
 		if ("first".equals(position))
 			facet = facets.get(0);
@@ -138,14 +211,7 @@ public class FacetSteps extends SearchSteps {
 			else
 				facet = facets.get(0);
 		}
-		facetText = facet.getText();
-
-		String suffix = facetText.endsWith("hits") ? " hits" : " hit";
-		facetHits = facetText.substring(facetText.indexOf(": ") + 2,
-				facetText.indexOf(suffix));
-		facetText = facetText.substring(0, facetText.indexOf(":"));
-
-		facet.click();
+		return facet;
 	}
 
 	@Then("$facet match breadcrumbs year")
@@ -257,9 +323,25 @@ public class FacetSteps extends SearchSteps {
 		thenHitsEquals(facetHits);
 	}
 
+	@Then("entries match $prefix")
+	public void thenEntriesMatchPrefix(@Named("prefix")String prefix) {
+		List<WebElement> facets = driver.findElements(By
+				.xpath("//*[@id=\"mainCol\"]/div/ul/li/a"));
+		assertTrue("first entry should match prefix",
+				facets.get(0).getText().startsWith(prefix));
+		assertTrue("last entry should match prefix",
+				facets.get(facets.size() - 1)
+				.getText().startsWith(prefix));
+		Random rand = new Random();
+		if (1 < facets.size())
+			assertTrue("random entry should match prefix",
+					facets.get(rand.nextInt(facets.size() - 1)).getText()
+							.startsWith(prefix));
+	}
+
 	@Then("<display-sort> is fixed")
 	@Alias("$display-sort is fixed")
-	public void thensortIsFixed(@Named("display-sort") String sort) {
+	public void thenSortIsFixed(@Named("display-sort") String sort) {
 		assertEquals(sort, driver.findElement(By.cssSelector("strong"))
 				.getText());
 	}
