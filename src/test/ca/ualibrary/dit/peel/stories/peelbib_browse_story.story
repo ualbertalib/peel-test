@@ -41,7 +41,7 @@ Examples:
 |category|
 |authordisplay|
 |titledisplay|
-|subjectdisplay|
+|subjectdisplay_en|
 
 Scenario: Browse Category
 Given visitor is on the <category> page

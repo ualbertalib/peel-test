@@ -247,20 +247,23 @@ public class FacetSteps extends SearchSteps {
 	@Then("results have newspaper years of publication in $range range")
 	public void thenResultsHaveNewspaperPublicationInRange()
 			throws ParseException {
-		SimpleDateFormat formatFacet = new SimpleDateFormat("yyyy");
+		SimpleDateFormat formatYear = new SimpleDateFormat("yyyy");
 		String[] dates = facetText.split(" \\p{Pd} ");
-		Date lowerDate = formatFacet.parse(dates[0]);
-		Date upperDate = formatFacet.parse(dates[1]);
+		Date lowerDate = formatYear.parse(dates[0]);
 
-		SimpleDateFormat formatTitle = new SimpleDateFormat("MMMMM dd, yyyy");
+		SimpleDateFormat formatFull = new SimpleDateFormat("MMMMM dd, yyyy");
+		Date upperDate = formatFull.parse("December 31, " + dates[1]);
+
 		WebElement firstResult = driver.findElement(By
 				.xpath("//li[@class='result'][@value=1]"));
 		String[] split = firstResult.findElement(By.xpath("dl/dt")).getText()
 				.split(", ");
-		Date date = formatTitle.parse(split[1] + ", " + split[2]);
+		Date date = formatFull.parse(split[1] + ", " + split[2]);
 
-		assertTrue("should be in range", lowerDate.compareTo(date) <= 0);
-		assertTrue("should be in range", upperDate.compareTo(date) >= 0);
+		assertTrue("should be greater than " + lowerDate,
+				lowerDate.compareTo(date) <= 0);
+		assertTrue("should be less than " + upperDate,
+				upperDate.compareTo(date) >= 0);
 	}
 
 	@Then("results have peelbib years of publication in $range range")
@@ -281,8 +284,10 @@ public class FacetSteps extends SearchSteps {
 			Date date = format.parse(pubyear1.substring(
 					pubyear1.length() - sample).replaceAll("[^0-9]*", ""));
 
-			assertTrue("should be in range", lowerDate.compareTo(date) <= 0);
-			assertTrue("should be in range", upperDate.compareTo(date) >= 0);
+			assertTrue("should be greater than " + lowerDate,
+					lowerDate.compareTo(date) <= 0);
+			assertTrue("should be greater than " + upperDate,
+					upperDate.compareTo(date) >= 0);
 		}
 	}
 
@@ -304,7 +309,8 @@ public class FacetSteps extends SearchSteps {
 				By.xpath("//li[@class='result'][@value=1]/dl/dt/cite/em"))
 				.getText();
 		assertTrue("'" + resultPublicationActual + "' should match '"
-				+ facetText + "'", resultPublicationActual.matches(facetText));
+				+ facetText + "'",
+				resultPublicationActual.matches(Pattern.quote(facetText)));
 	}
 
 	@Then("results have fulltext available")
@@ -327,7 +333,7 @@ public class FacetSteps extends SearchSteps {
 	public void thenEntriesMatchPrefix(@Named("prefix")String prefix) {
 		List<WebElement> facets = driver.findElements(By
 				.xpath("//*[@id=\"mainCol\"]/div/ul/li/a"));
-		assertTrue("first entry should match prefix",
+		assertTrue("first entry should match prefix", 
 				facets.get(0).getText().startsWith(prefix));
 		assertTrue("last entry should match prefix",
 				facets.get(facets.size() - 1)

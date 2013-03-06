@@ -1,2 +1,3 @@
 baseUrl=http://cocoon-server/
-sample=peel-solr
+#sample=peel-solr
+#sample=production

@@ -31,7 +31,9 @@ public class SearchSteps extends SeleneseTestBase {
 	protected String baseUrl;
 	private Properties prop;
 	protected boolean isSample;
+	protected boolean isProduction;
 	private static String PEEL_SOLR_SAMPLE = "peel-solr";
+	private static String PRODUCTION_SAMPLE = "production";
 
 	protected static long WAIT_TIME = 30;
 
@@ -46,6 +48,7 @@ public class SearchSteps extends SeleneseTestBase {
 			.getAbsolutePath() + "/test.properties"));
 			baseUrl = prop.getProperty("baseUrl");
 			isSample = PEEL_SOLR_SAMPLE.equals(prop.getProperty("sample"));
+			isProduction = PRODUCTION_SAMPLE.equals(prop.getProperty("sample"));
 		} catch (Exception e) {
 			baseUrl = System.getenv("baseUrl");
 			if (null == baseUrl)
@@ -100,7 +103,7 @@ public class SearchSteps extends SeleneseTestBase {
 	@Alias("user enters $value in the form id $id")
 	public void whenUserEntersIdValueInTheForm(@Named("id") String id,
 			@Named("value") String value) {
-		if (!isSample)
+		if (isProduction)
 			id += "display";
 		enterInElement(By.id(id), value);
 	}
