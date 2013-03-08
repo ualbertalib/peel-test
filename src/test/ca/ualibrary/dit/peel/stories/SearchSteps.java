@@ -1,75 +1,24 @@
 package ca.ualibrary.dit.peel.stories;
 
-import java.io.FileInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Aliases;
-import org.jbehave.core.annotations.BeforeStory;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.pagefactory.ByChained;
 import org.openqa.selenium.support.ui.Select;
 
-import com.thoughtworks.selenium.SeleneseTestBase;
 
-public class SearchSteps extends SeleneseTestBase {
-
-	protected WebDriver driver;;
-	protected String baseUrl;
-	private Properties prop;
-	protected boolean isSample;
-	protected boolean isProduction;
-	private static String PEEL_SOLR_SAMPLE = "peel-solr";
-	private static String PRODUCTION_SAMPLE = "production";
-
-	protected static long WAIT_TIME = 30;
-
-	@BeforeStory
-	public void setUp() {
-		driver = new FirefoxDriver();
-		driver.manage().timeouts().implicitlyWait(WAIT_TIME, TimeUnit.SECONDS);
-
-		prop = new Properties();
-		try {
-			prop.load(new FileInputStream(new java.io.File("")
-			.getAbsolutePath() + "/test.properties"));
-			baseUrl = prop.getProperty("baseUrl");
-			isSample = PEEL_SOLR_SAMPLE.equals(prop.getProperty("sample"));
-			isProduction = PRODUCTION_SAMPLE.equals(prop.getProperty("sample"));
-		} catch (Exception e) {
-			baseUrl = System.getenv("baseUrl");
-			if (null == baseUrl)
-				baseUrl = "http://peel.library.ualberta.ca";
-		}
-		setCaptureScreenShotOnFailure(true);
-	}
-
-	@AfterStory
-	public void tearDown() {
-		driver.quit();
-	}
-
-	@Given("visitor is on the front page")
-	public void givenVisitorIsOnTheFrontPage() {
-		driver.get(baseUrl + "index.html");
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
-		assertEquals(
-				"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
-				driver.getTitle());
-	}
+public class SearchSteps extends PeelSteps {
 
 	@Given("visitor is on the 'find books' page")
 	public void givenVisitorIsOnTheFindBooksPage() {
@@ -133,11 +82,6 @@ public class SearchSteps extends SeleneseTestBase {
 		enterInElement(By.id("keywords2"), query);
 	}
 
-	private void enterInElement(By element, String value) {
-		driver.findElement(element).clear();
-		driver.findElement(element).sendKeys(value);
-	}
-
 	@When("user clicks 'go'")
 	public void whenUserClicksGo() {
 		driver.findElement(By.id("submit2")).click();
@@ -160,16 +104,6 @@ public class SearchSteps extends SeleneseTestBase {
 	@When("user clicks 'submit' at the bottom of form")
 	public void whenUserClicksSubmitAtTheBottomOfForm() {
 		driver.findElement(By.cssSelector("p.buttons > input.submit")).click();
-	}
-
-	@When("user enters <query> in the header form")
-	public void whenUserEntersQueryInTheHeaderForm(@Named("query") String query) {
-		enterInElement(By.id("keywords"), query);
-	}
-
-	@When("user clicks 'search'")
-	public void whenUserClicksSearch() {
-		driver.findElement(By.id("submit")).click();
 	}
 
 	@When("user checks id $type")

@@ -21,8 +21,6 @@ public class FacetSteps extends SearchSteps {
 
 	String facetText = "";
 	String facetHits = "";
-	protected static long WAIT_TIME = 10;
-
 	@Given("visitor is on a newspapers results page for 'alberta'")
 	public void givenVisitorIsOnANewspapersResultsPageForAlberta() {
 		driver.get(baseUrl
