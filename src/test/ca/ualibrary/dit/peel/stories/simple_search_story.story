@@ -7,7 +7,7 @@ Scenario: Simple search from front page newspaper index
 
 Given visitor is on the front page
 When user enters <query> in the header form
-When user selects <name> <value> in the form
+And user selects <name> <value> in the form
 And user clicks 'search'
 Then title is 'Search Results'
 And breadcrumbs contain <query>
