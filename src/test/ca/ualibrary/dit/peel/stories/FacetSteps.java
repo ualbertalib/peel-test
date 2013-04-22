@@ -47,7 +47,7 @@ public class FacetSteps extends SearchSteps {
 	@Given("visitor is on the <category> page")
 	public void givenVisitorIsOnTheCategoryPage(
 			@Named("category") String category) {
-		driver.get(baseUrl + "browse/" + category + "/");
+    driver.get(baseUrl + "browse/" + category + "/?page=1");
 		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
 	}
 

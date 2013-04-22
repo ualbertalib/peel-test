@@ -143,7 +143,9 @@ public class SearchSteps extends PeelSteps {
 		String hitsFoundActual = driver.findElement(
 				By.className("hits-found")).getText();
 		int numHits = Integer.parseInt(hitsFoundActual.split(" ")[0]);
-		assertTrue("hits should be greater than zero", 0 < numHits);
+    if (Integer.parseInt(hits) > 0) {
+      assertTrue("hits should be greater than zero", 0 < numHits);
+    }
 		if (isSample) {
 			String hitsFoundExpected = hits + " hits found\\.";
 			assertTrue("'" + hitsFoundActual + "' should match '"

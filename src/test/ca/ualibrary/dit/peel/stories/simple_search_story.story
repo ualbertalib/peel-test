@@ -20,6 +20,7 @@ Examples:
 |phrase|"junior football"|1|index|newspapers|
 |boolean|horse hand|9|index|newspapers|
 |boolean|horse OR hand|9|index|newspapers|
+|boolean|+horse +hand|1|index|newspapers|
 |boolean|horse AND hand|1|index|newspapers|
 |boolean|horse -hand|1|index|newspapers|
 |boolean|horse NOT hand|1|index|newspapers|
@@ -40,9 +41,11 @@ Examples:
 |en|horse|262|
 |fr|français|2|
 |cr|Kwayask ê-kî-pê-kiskinowâpahtihicik|1|
+|uk|Канада|0|
 |phrase|"rocky mountains"|124|
 |boolean|horse dog|275|
 |boolean|horse OR dog|275|
+|boolean|+horse +dog|160|
 |boolean|horse AND dog|160|
 |boolean|horse -dog|102|
 |boolean|horse NOT dog|102|
@@ -50,3 +53,5 @@ Examples:
 |fuzzy|horse~|282|
 |proximity|"horse dog"~100|35|
 |truncation|horse*|273|
+|geneology|"j. k. fildes"|1|
+|geneology|j k fildes|284|

@@ -56,18 +56,17 @@ Then title is 'Search Results'
 And breadcrumbs contain <query>
 And hits <hits>
 And results are sorted by <sort>
-And first result is <peelbib>
 
 Examples:     
-|query|sort|hits|peelbib|
-|horse|sort-score|262|Peel 2490|
-|horse|sort-peelnum|262|Peel 2490|
-|horse|sort-pubyear-asc|262|Peel 9021.Index.1953-1977|
-|horse|sort-pubyear-desc|262|Peel 10571.73|
-|horse|sort-author-asc|262|Peel 9021.52.4|
-|horse|sort-author-desc|262|Peel 2490|
-|horse|sort-title-asc|262|Peel 9021.2.2-3|
-|horse|sort-title-desc|262|Peel 10571.64|
+|query|sort|hits|
+|horse|sort-score|262|
+|horse|sort-peelnum|262|
+|horse|sort-pubyear-asc|262|
+|horse|sort-pubyear-desc|262|
+|horse|sort-author-asc|262|
+|horse|sort-author-desc|262|
+|horse|sort-title-asc|262|
+|horse|sort-title-desc|262|
 
 Scenario: Advanced search only one id clause
 
