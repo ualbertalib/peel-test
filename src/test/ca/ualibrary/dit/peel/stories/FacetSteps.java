@@ -15,6 +15,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.pagefactory.ByChained;
 
 public class FacetSteps extends SearchSteps {
@@ -80,7 +81,8 @@ public class FacetSteps extends SearchSteps {
 	public void whenUserClicksOnSort(@Named("display-sort") String sort) {
 		List<WebElement> facets = driver.findElements(By
 				.xpath("//*[@id=\"subCol\"]/div[1]/ul/li/a"));
-		if (!facets.get(0).isDisplayed())
+    if (driver instanceof InternetExplorerDriver
+        || !facets.get(0).isDisplayed())
 			driver.findElement(By.id("sort-options")).click();
 		driver.findElement(By.linkText(sort)).click();
 	}
@@ -122,7 +124,8 @@ public class FacetSteps extends SearchSteps {
 	public void whenUserSelectsPeelbibSubject(
 			@Named("position") String position) {
 		List<WebElement> facets = driver.findElements(By.xpath("//*[@id=\"subCol\"]/div[6]/table/tbody/tr"));
-		if (!facets.get(0).isDisplayed()) {
+    if (driver instanceof InternetExplorerDriver
+        || !facets.get(0).isDisplayed()) {
 			driver.findElement(By.cssSelector("h4#found-in")).click();
 		}
 		WebElement facet = null;
@@ -179,7 +182,8 @@ public class FacetSteps extends SearchSteps {
 	private void selectFacet(String position, String xpath,
 			String cssSelectFacet) {
 		List<WebElement> facets = driver.findElements(By.xpath(xpath));
-		if (!facets.get(0).isDisplayed()) {
+    if (driver instanceof InternetExplorerDriver
+        || !facets.get(0).isDisplayed()) {
 			driver.findElement(By.cssSelector(cssSelectFacet))
 					.click();
 		}

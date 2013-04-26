@@ -33,7 +33,6 @@
     
     <target name="clean">
         <delete dir="${target.dir}"/>
-        <delete dir="${lib.dir}"/>
     </target>
     
     <target name="compile" depends="compile.java, compile.test"/>
