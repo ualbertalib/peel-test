@@ -14,6 +14,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.pagefactory.ByChained;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -128,6 +129,7 @@ public class FacetSteps extends SearchSteps {
     List<WebElement> facets = driver.findElements(By
         .xpath("//*[@id=\"subCol\"]/div[6]/table/tbody/tr"));
     if (driver instanceof InternetExplorerDriver
+        || driver instanceof ChromeDriver
         || !driver.findElement(
             By.xpath("//*[@id=\"subCol\"]/div[6]/table/tbody/tr[1]"))
             .isDisplayed()) {
@@ -362,9 +364,14 @@ public class FacetSteps extends SearchSteps {
 	@Then("<display-sort> is fixed")
 	@Alias("$display-sort is fixed")
 	public void thenSortIsFixed(@Named("display-sort") String sort) {
+    if (driver instanceof ChromeDriver
+        && !driver.findElement(
+            By.xpath("//*[@id=\"subCol\"]/div[1]/ul/li/strong")).isDisplayed()) {
+      driver.findElement(By.cssSelector("h4#sort-options")).click();
+    }
     wait.until(ExpectedConditions.textToBePresentInElement(
         By.cssSelector("strong"), sort));
-		assertEquals(sort, driver.findElement(By.cssSelector("strong"))
+    assertEquals(sort, driver.findElement(By.cssSelector("strong"))
 				.getText());
 	}
 }

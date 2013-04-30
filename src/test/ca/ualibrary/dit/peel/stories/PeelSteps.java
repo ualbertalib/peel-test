@@ -13,6 +13,8 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -33,7 +35,8 @@ public class PeelSteps extends SeleneseTestBase {
 	private static String PRODUCTION_SAMPLE = "production";
   private static String BROWSER_IEXPLORER = "iexplorer";
   private static String BROWSER_SAFARI = "safari";
-	protected static long WAIT_TIME = 30;
+  private static String BROWSER_CHROME = "chrome";
+  protected static long WAIT_TIME = 5;
 
 	public PeelSteps() {
 		super();
@@ -58,7 +61,7 @@ public class PeelSteps extends SeleneseTestBase {
       if (null == baseUrl) baseUrl = "http://peel.library.ualberta.ca";
     }
     
-    wait = new WebDriverWait(driver, 20);
+    wait = new WebDriverWait(driver, WAIT_TIME);
 
 	}
 
@@ -70,6 +73,10 @@ public class PeelSteps extends SeleneseTestBase {
       driver = new InternetExplorerDriver();
     } else if (BROWSER_SAFARI.equals(property)) {
       driver = new SafariDriver();
+    } else if (BROWSER_CHROME.equals(property)) {
+      File chromedriver = new File("selenium/chromedriver_1.exe");
+      System.setProperty("webdriver.chrome.driver", chromedriver.toString());
+      driver = new ChromeDriver();
     } else { // firefox is the default
       driver = new FirefoxDriver();
     }
@@ -92,7 +99,9 @@ public class PeelSteps extends SeleneseTestBase {
 
   @When("user clicks 'search'")
 	public void whenUserClicksSearch() {
-		driver.findElement(By.id("submit")).click();
+    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By
+        .id("submit")));
+    element.click();
 	}
 
 	protected void enterInElement(By element, String value) {

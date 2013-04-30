@@ -166,8 +166,8 @@ public class SearchSteps extends PeelSteps {
 		}
 	}
 
-	@Then("first newspaper result is <title>")
-	public void thenFirstNewspaperResultIsTitle(@Named("title") String title) {
+  @Then("first newspaper result is <newstitle>")
+  public void thenFirstNewspaperResultIsTitle(@Named("newstitle") String title) {
 		if (isSample) {
 			String firstResultExpected = title;
 			String firstResultActual = driver.findElement(

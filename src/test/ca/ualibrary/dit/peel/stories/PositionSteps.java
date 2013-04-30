@@ -51,7 +51,7 @@ public class PositionSteps extends PeelSteps {
 		WebElement firstResult = driver.findElement(By
 				.xpath("//li[@class='result'][@value=1]"));
 		WebElement page = firstResult.findElement(By
-				.xpath("dl/dd[@class='image']/a"));
+        .xpath("dl/dd[@class='image']/a/img"));
 		String title = firstResult.findElement(By.xpath("dl/dt")).getText();
 		title = title.replaceAll("p.", "Page ");
 		// replace last ',' with ', Item'
