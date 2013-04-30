@@ -9,7 +9,7 @@ Given visitor is on the front page
 When user enters <query> in the header form
 And user selects <name> <value> in the form
 And user clicks 'search'
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain <query>
 And hits <hits>
 
@@ -32,7 +32,7 @@ Scenario: Simple search from front page default index
 Given visitor is on the front page
 When user enters <query> in the header form
 And user clicks 'search'
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain <query>
 And hits <hits>
 

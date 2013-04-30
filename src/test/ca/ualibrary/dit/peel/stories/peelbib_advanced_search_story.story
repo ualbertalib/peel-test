@@ -13,7 +13,7 @@ And user enters 1850 TO 1860 in the form name pubyear
 And user enters 1856 in the form name actyear
 And user selects cre in the form name language
 And user clicks 'go'
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain Title: Book of Common Prayer AND Publication year: [1850 TO 1860] AND Activity year: 1856 AND Subject: Indians of North America--Languages AND Author: Hunter, James AND Language: Cree
 And hits 1
 And first result is Peel 329
@@ -23,7 +23,7 @@ Scenario: Simplest advanced search
 Given visitor is on the 'find books' page
 When user enters <query> in the form
 And user clicks 'go'
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain <query>
 And hits <hits>
 
@@ -37,7 +37,7 @@ Given visitor is on the 'find books' page
 When user enters <query> in the form
 And user selects fulltext
 And user clicks 'submit' at the bottom of form
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain <query>
 And hits <hits>
 And first result is <peelbib>
@@ -52,7 +52,7 @@ Given visitor is on the 'find books' page
 When user enters <query> in the form
 And peelbib user selects <sort>
 And user clicks 'submit' at the bottom of form
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain <query>
 And hits <hits>
 And results are sorted by <sort>
@@ -73,7 +73,7 @@ Scenario: Advanced search only one id clause
 Given visitor is on the 'find books' page
 When user enters <id> <value> in the form
 And user clicks 'go'
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain <query>
 And hits <hits> 
 
@@ -88,7 +88,7 @@ Scenario: Advanced search only one named clause
 Given visitor is on the 'find books' page
 When user enters <name> <value> in the form
 And user clicks 'go'
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain <query>
 And hits <hits> 
 
@@ -103,7 +103,7 @@ Scenario: Advanced search only one selection clause
 Given visitor is on the 'find books' page
 When user selects <name> <value> in the form
 And user clicks 'go'
-Then title is 'Search Results'
+Then title is Search Results
 And breadcrumbs contain <query>
 And hits <hits> 
 

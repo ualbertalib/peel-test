@@ -1,7 +1,5 @@
 package ca.ualibrary.dit.peel.stories;
 
-import java.util.concurrent.TimeUnit;
-
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
@@ -9,6 +7,7 @@ import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 
 public class PositionSteps extends PeelSteps {
@@ -23,7 +22,7 @@ public class PositionSteps extends PeelSteps {
 		driver.get(baseUrl
 				+ "search/?search=raw&pageNumber=1&field=body&rawQuery=" + term
 				+ "&index=" + index);
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs("Search Results"));
 		assertEquals("Search Results", driver.getTitle());
 	}
 
@@ -42,7 +41,7 @@ public class PositionSteps extends PeelSteps {
 		String title = firstResult.findElement(By.xpath("dl/dt/a")).getText()
 				+ ", p. " + page.getText();
 		page.click();
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs(title));
 
 		assertEquals(title, driver.getTitle());
 	}
@@ -60,7 +59,7 @@ public class PositionSteps extends PeelSteps {
 		title = title.substring(0, lastComma + 1) + " Item"
 				+ title.substring(lastComma + 1, title.length());
 		page.click();
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs(title));
 
 		assertEquals(title, driver.getTitle());
 	}

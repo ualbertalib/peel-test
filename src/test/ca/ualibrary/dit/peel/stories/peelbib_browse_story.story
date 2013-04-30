@@ -6,18 +6,20 @@ I want to browse the peel portal
 Scenario: Search browse by category
 Given visitor is on the browse page
 When user enters A in the <categoryType> searchbox
-Then entries match A
+Then title is <title>
+And entries match A
 
 Examples:
-|categoryType|
-|authorprefix|
-|titleprefix|
-|subjectprefix|
+|categoryType|title|
+|authorprefix|Browse Authors|
+|titleprefix|Browse Titles|
+|subjectprefix|Browse Subjects|
 
 Scenario: Browse
 Given visitor is on the browse page
 When user clicks <position> entry of <category>
-Then entry match hits
+Then title is Search Results
+And entry match hits
 And entry match breadcrumbs
 
 Examples:
@@ -35,18 +37,20 @@ Examples:
 Scenario: Browse Category search
 Given visitor is on the <category> page
 When user enters A in the prefix searchbox
-Then entries match A
+Then title is <title>
+And entries match A
 
 Examples:
-|category|
-|authordisplay|
-|titledisplay|
-|subjectdisplay_en|
+|category|title|
+|authordisplay|Browse Authors|
+|titledisplay|Browse Titles|
+|subjectdisplay_en|Browse Subjects|
 
 Scenario: Browse Category
 Given visitor is on the <category> page
 When user clicks <position> entry
-Then entry match hits
+Then title is Search Results
+And entry match hits
 And entry match breadcrumbs
 
 Examples:

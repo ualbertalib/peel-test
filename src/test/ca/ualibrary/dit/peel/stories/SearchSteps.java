@@ -3,7 +3,6 @@ package ca.ualibrary.dit.peel.stories;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.jbehave.core.annotations.Alias;
@@ -15,6 +14,7 @@ import org.jbehave.core.annotations.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ByChained;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 
@@ -23,28 +23,29 @@ public class SearchSteps extends PeelSteps {
 	@Given("visitor is on the 'find books' page")
 	public void givenVisitorIsOnTheFindBooksPage() {
 		driver.get(baseUrl + "index.html");
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+		wait.until(ExpectedConditions.titleIs("Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History"));
 		assertEquals(
 				"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
 				driver.getTitle());
 		driver.findElement(By.cssSelector("a.tab4")).click();
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs("Advanced Search"));
 		assertEquals("Advanced Search", driver.getTitle());
 	}
 
 	@Given("visitor is on the 'find newspapers advanced search' page")
 	public void givenVisitorIsOnTheFindNewspapersAdvancedSearchPage() {
 		driver.get(baseUrl + "/index.html");
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions
+        .titleIs("Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History"));
 		assertEquals(
 				"Peel's Prairie Provinces - Sources for Western Canada and Western Canadian History",
 				driver.getTitle());
 		driver.findElement(By.cssSelector("a.tab5")).click();
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs("Newspapers"));
 		assertEquals("Newspapers", driver.getTitle());
 		driver.findElement(By.cssSelector("a.advanced"))
 				.click();
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs("Newspapers"));
 		assertEquals("Newspapers", driver.getTitle());
 	}
 
@@ -116,12 +117,6 @@ public class SearchSteps extends PeelSteps {
 		driver.findElement(By.name(size)).click();
 	}
 
-	@Then("title is 'Search Results'")
-	public void thenTitleIsSearchResults() {
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
-		assertEquals("Search Results", driver.getTitle());
-	}
-
 	@Then("breadcrumbs contain <query>")
 	@Aliases(values = { "breadcrumbs contain <keywords>",
 	"breadcrumbs contain $query" })
@@ -140,6 +135,9 @@ public class SearchSteps extends PeelSteps {
 	@Then("hits <hits>")
 	@Alias("hits $hits")
 	public void thenHitsEquals(@Named("hits") String hits) {
+    wait.until(ExpectedConditions.refreshed(ExpectedConditions
+        .textToBePresentInElement(By.className("hits-found"), hits
+            + " hits found.")));
 		String hitsFoundActual = driver.findElement(
 				By.className("hits-found")).getText();
 		int numHits = Integer.parseInt(hitsFoundActual.split(" ")[0]);

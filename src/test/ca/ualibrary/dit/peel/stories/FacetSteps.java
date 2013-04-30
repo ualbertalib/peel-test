@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.jbehave.core.annotations.Alias;
@@ -17,6 +16,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.pagefactory.ByChained;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class FacetSteps extends SearchSteps {
 
@@ -26,7 +26,7 @@ public class FacetSteps extends SearchSteps {
 	public void givenVisitorIsOnANewspapersResultsPageForAlberta() {
 		driver.get(baseUrl
 				+ "search/?search=raw&pageNumber=1&field=body&rawQuery=alberta&index=newspapers");
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs("Search Results"));
 		assertEquals("Search Results", driver.getTitle());
 	}
 
@@ -34,14 +34,14 @@ public class FacetSteps extends SearchSteps {
 	public void givenVisitorIsOnAPeelbibResultsPageForCanada() {
 		driver.get(baseUrl
 				+ "search/?search=raw&pageNumber=1&field=body&rawQuery=canada&index=peelbib");
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs("Search Results"));
 		assertEquals("Search Results", driver.getTitle());
 	}
 
 	@Given("visitor is on the browse page")
 	public void givenVisitorIsOnTheBrowsePage() {
 		driver.get(baseUrl + "browse/");
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleIs("Browse Peel Bibliography"));
 		assertEquals("Browse Peel Bibliography", driver.getTitle());
 	}
 
@@ -49,7 +49,7 @@ public class FacetSteps extends SearchSteps {
 	public void givenVisitorIsOnTheCategoryPage(
 			@Named("category") String category) {
     driver.get(baseUrl + "browse/" + category + "/?page=1");
-		driver.manage().timeouts().pageLoadTimeout(WAIT_TIME, TimeUnit.SECONDS);
+    wait.until(ExpectedConditions.titleContains("Browse"));
 	}
 
 	@When("user enters $prefix in the $categoryType searchbox")
@@ -68,6 +68,8 @@ public class FacetSteps extends SearchSteps {
 	public void whenUserSelectsEdmontonAlberta1Hit() {
 		driver.findElement(By.id("map-tool")).click();
 		driver.findElement(By.id("mtgt_unnamed_0")).click();
+    wait.until(ExpectedConditions.visibilityOfElementLocated(By
+        .linkText("Search")));
 		WebElement location = driver.findElement(By.linkText("Search"));
 		WebElement parent = location.findElement(By.xpath(".."));
 		facetText = parent.getText();
@@ -123,9 +125,12 @@ public class FacetSteps extends SearchSteps {
 	@When("user selects peelbib $position subject")
 	public void whenUserSelectsPeelbibSubject(
 			@Named("position") String position) {
-		List<WebElement> facets = driver.findElements(By.xpath("//*[@id=\"subCol\"]/div[6]/table/tbody/tr"));
+    List<WebElement> facets = driver.findElements(By
+        .xpath("//*[@id=\"subCol\"]/div[6]/table/tbody/tr"));
     if (driver instanceof InternetExplorerDriver
-        || !facets.get(0).isDisplayed()) {
+        || !driver.findElement(
+            By.xpath("//*[@id=\"subCol\"]/div[6]/table/tbody/tr[1]"))
+            .isDisplayed()) {
 			driver.findElement(By.cssSelector("h4#found-in")).click();
 		}
 		WebElement facet = null;
@@ -222,7 +227,8 @@ public class FacetSteps extends SearchSteps {
 			String breadcrumbsFoundExpected = "^[\\s\\S]*Query:.*"
 					+ Pattern.quote(facetText.replaceAll("\\p{Pd}", "TO"))
 					+ ".*[\\s\\S]*$";
-
+      wait.until(ExpectedConditions.textToBePresentInElement(
+          By.className("breadcrumbs"), facetText.replaceAll("\\p{Pd}", "TO")));
 			String breadcrumbsFoundActual = driver.findElement(
 					By.className("breadcrumbs")).getText();
 			assertTrue("'" + breadcrumbsFoundActual + "' should match regex '"
@@ -237,7 +243,8 @@ public class FacetSteps extends SearchSteps {
 			String breadcrumbsFoundExpected = "^[\\s\\S]*Query:.*"
 					+ Pattern.quote(facetText)
 					+ ".*[\\s\\S]*$";
-
+      wait.until(ExpectedConditions.textToBePresentInElement(
+          By.className("breadcrumbs"), facetText));
 			String breadcrumbsFoundActual = driver.findElement(
 					By.className("breadcrumbs")).getText();
 			assertTrue("'" + breadcrumbsFoundActual + "' should match regex '"
@@ -307,6 +314,8 @@ public class FacetSteps extends SearchSteps {
 
 	@Then("results have $position publication")
 	public void thenResultsHavePublication() {
+    wait.until(ExpectedConditions.textToBePresentInElement(
+        By.xpath("//li[@class='result'][@value=1]/dl/dt/cite/em"), facetText));
 		String resultPublicationActual = driver.findElement(
 				By.xpath("//li[@class='result'][@value=1]/dl/dt/cite/em"))
 				.getText();
@@ -333,7 +342,10 @@ public class FacetSteps extends SearchSteps {
 
 	@Then("entries match $prefix")
 	public void thenEntriesMatchPrefix(@Named("prefix")String prefix) {
-		List<WebElement> facets = driver.findElements(By
+    wait.until(ExpectedConditions.refreshed(ExpectedConditions
+        .textToBePresentInElement(By.xpath("//*[@id=\"mainCol\"]/div/ul/li/a"),
+            prefix)));
+	  List<WebElement> facets = driver.findElements(By
 				.xpath("//*[@id=\"mainCol\"]/div/ul/li/a"));
 		assertTrue("first entry should match prefix", 
 				facets.get(0).getText().startsWith(prefix));
@@ -350,6 +362,8 @@ public class FacetSteps extends SearchSteps {
 	@Then("<display-sort> is fixed")
 	@Alias("$display-sort is fixed")
 	public void thenSortIsFixed(@Named("display-sort") String sort) {
+    wait.until(ExpectedConditions.textToBePresentInElement(
+        By.cssSelector("strong"), sort));
 		assertEquals(sort, driver.findElement(By.cssSelector("strong"))
 				.getText());
 	}

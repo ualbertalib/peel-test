@@ -7,7 +7,8 @@ Scenario: Hits found on page(s) in result set
 Given visitor is on the front page
 When user enters horse in the header form
 And user clicks 'search'
-Then results contain hits on page
+Then title is Search Results
+And results contain hits on page
 
 Scenario: Hits found on page(s) in item
 Given visitor is on a peelbib results page for horse
