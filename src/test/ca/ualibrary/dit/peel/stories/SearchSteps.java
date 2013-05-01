@@ -227,18 +227,23 @@ public class SearchSteps extends PeelSteps {
 
 	private void assertDateOrder(WebElement firstResult, WebElement secondResult)
 			throws ParseException {
+
+		String[] split = firstResult.findElement(By.xpath("dl/dt")).getText()
+				.split(", ");
+		split = secondResult.findElement(By.xpath("dl/dt")).getText()
+				.split(", ");
+		Date date1;
+		Date date2;
 		SimpleDateFormat format;
 		if("Linux".equals(System.getProperty("os.name")) && driver instanceof ChromeDriver) {
 			format = new SimpleDateFormat("dd MMMMM yyyy");
+			date1 = format.parse(split[1]);
+			date2 = format.parse(split[1]);
 		} else {
 			format = new SimpleDateFormat("MMMMM dd, yyyy");
+			date1 = format.parse(split[1] + ", " + split[2]);
+			date2 = format.parse(split[1] + ", " + split[2]);
 		}
-		String[] split = firstResult.findElement(By.xpath("dl/dt")).getText()
-				.split(", ");
-		Date date1 = format.parse(split[1] + ", " + split[2]);
-		split = secondResult.findElement(By.xpath("dl/dt")).getText()
-				.split(", ");
-		Date date2 = format.parse(split[1] + ", " + split[2]);
 		assertTrue(date1.toString() + " should be before " + date2.toString(),
 				date1.compareTo(date2) <= 0);
 	}
