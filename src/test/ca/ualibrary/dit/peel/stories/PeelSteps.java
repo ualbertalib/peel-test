@@ -81,7 +81,12 @@ public class PeelSteps extends SeleneseTestBase {
     } else if (BROWSER_SAFARI.equals(property)) {
       driver = new SafariDriver();
     } else if (BROWSER_CHROME.equals(property)) {
-      File chromedriver = new File("selenium/chromedriver_1.exe");
+    	File chromedriver;
+    	if("Linux".equals(System.getProperty("os.name"))) {
+    		chromedriver = new File("selenium/chromedriver"); 
+    	} else {
+    	    chromedriver =  new File("selenium/chromedriver_1.exe");
+    	}
       System.setProperty("webdriver.chrome.driver", chromedriver.toString());
       driver = new ChromeDriver();
     } else { // firefox is the default
