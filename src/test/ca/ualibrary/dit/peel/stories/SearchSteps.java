@@ -235,7 +235,7 @@ public class SearchSteps extends PeelSteps {
 		Date date1;
 		Date date2;
 		SimpleDateFormat format;
-		if("Linux".equals(System.getProperty("os.name")) && driver instanceof ChromeDriver) {
+		if("Linux".equals(System.getProperty("os.name")) && driver instanceof ChromeDriver && !driver.getCurrentUrl().contains("locale")) {
 			format = new SimpleDateFormat("dd MMMMM yyyy");
 			date1 = format.parse(split[1]);
 			date2 = format.parse(split[1]);
