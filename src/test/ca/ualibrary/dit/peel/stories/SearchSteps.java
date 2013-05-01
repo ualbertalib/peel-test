@@ -136,8 +136,7 @@ public class SearchSteps extends PeelSteps {
 	@Alias("hits $hits")
 	public void thenHitsEquals(@Named("hits") String hits) {
     wait.until(ExpectedConditions.refreshed(ExpectedConditions
-        .textToBePresentInElement(By.className("hits-found"), hits
-            + " hits found.")));
+        .textToBePresentInElement(By.className("hits-found"), " hits found.")));
 		String hitsFoundActual = driver.findElement(
 				By.className("hits-found")).getText();
 		int numHits = Integer.parseInt(hitsFoundActual.split(" ")[0]);

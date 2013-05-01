@@ -53,7 +53,7 @@ public class PositionSteps extends PeelSteps {
 		WebElement page = firstResult.findElement(By
         .xpath("dl/dd[@class='image']/a/img"));
 		String title = firstResult.findElement(By.xpath("dl/dt")).getText();
-		title = title.replaceAll("p.", "Page ");
+    title = title.replaceAll("p\\.", "Page ");
 		// replace last ',' with ', Item'
 		int lastComma = title.lastIndexOf(",");
 		title = title.substring(0, lastComma + 1) + " Item"

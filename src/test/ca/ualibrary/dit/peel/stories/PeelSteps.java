@@ -29,8 +29,8 @@ public class PeelSteps extends SeleneseTestBase {
   WebDriverWait wait;
 	protected String baseUrl;
 	private Properties prop;
-	protected boolean isSample;
-	protected boolean isProduction;
+  protected boolean isSample = false;
+  protected boolean isProduction = true;
 	private static String PEEL_SOLR_SAMPLE = "peel-solr";
 	private static String PRODUCTION_SAMPLE = "production";
   private static String BROWSER_IEXPLORER = "iexplorer";
@@ -57,10 +57,17 @@ public class PeelSteps extends SeleneseTestBase {
       initBrowserDriver(prop.getProperty("browser"));
       
     } catch (Exception e) {
+      initBrowserDriver(System.getenv("browser"));
       baseUrl = System.getenv("baseUrl");
-      if (null == baseUrl) baseUrl = "http://peel.library.ualberta.ca";
+      if (null == baseUrl) baseUrl = "http://peeldev1.library.ualberta.ca";
+      String sample = System.getenv("sample");
+      if (null != sample) {
+        isSample = PEEL_SOLR_SAMPLE.equals(sample);
+        isProduction = PRODUCTION_SAMPLE.equals(sample);
+      }
     }
     
+    if (!baseUrl.endsWith("/")) baseUrl += "/";
     wait = new WebDriverWait(driver, WAIT_TIME);
 
 	}
