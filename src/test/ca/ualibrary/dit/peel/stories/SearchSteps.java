@@ -228,7 +228,7 @@ public class SearchSteps extends PeelSteps {
 	private void assertDateOrder(WebElement firstResult, WebElement secondResult)
 			throws ParseException {
 		SimpleDateFormat format;
-		if("Linux".equals(System.getProperty("os.name")) && driver instanceof ChromeDriver)) {
+		if("Linux".equals(System.getProperty("os.name")) && driver instanceof ChromeDriver) {
 			format = new SimpleDateFormat("dd MMMMM yyyy");
 		} else {
 			format = new SimpleDateFormat("MMMMM dd, yyyy");
