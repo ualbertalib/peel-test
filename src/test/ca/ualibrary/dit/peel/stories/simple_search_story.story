@@ -25,6 +25,7 @@ Examples:
 |boolean|horse -hand|1|index|newspapers|
 |boolean|horse NOT hand|1|index|newspapers|
 |boolean|(horse OR dog) AND cat|1|index|newspapers|
+|fuzzy|horse~|68|index|newspapers|
 |proximity|"alberta saskatchewan"~100|2|index|newspapers|
 
 Scenario: Simple search from front page default index
@@ -54,4 +55,5 @@ Examples:
 |proximity|"horse dog"~100|35|
 |truncation|horse*|273|
 |geneology|"j. k. fildes"|1|
+|geneology|"j k fildes"|1|
 |geneology|j k fildes|284|
