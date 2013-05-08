@@ -41,8 +41,8 @@ And first newspaper result is <newstitle>
 Examples:     
 |query|sort|hits|newstitle|
 |alberta|sort_score|18|The Gateway, November 9, 1934, p.3, Ar00311|
-|alberta|sort_date-asc|18|The Calgary Eye-Opener, October 3, 1908, p.3, Ad00305_2|
-|alberta|sort_date-desc|18|La Liberté et le patriote, August 10, 1956, p.6, Ar00610|
+|alberta|sort_date-asc|18|The Calgary Eye-Opener, October 3, 1908, p.1, Ar00103|
+|alberta|sort_date-desc|18|La Liberté et le patriote, August 10, 1956, p.8, Ar00811|
 
 Scenario: Advanced search with all size and type
 Given visitor is on the 'find newspapers advanced search' page
