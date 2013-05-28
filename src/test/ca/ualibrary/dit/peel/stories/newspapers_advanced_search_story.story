@@ -62,7 +62,7 @@ And user checks id newspapers_type_ad
 And user checks id newspapers_type_picture
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item size: large OR medium OR xlarge OR small
+And breadcrumbs contain Item size: small OR xlarge OR large OR medium
 And hits 323
 
 
@@ -72,7 +72,7 @@ When user checks id newspapers_type_article
 And user checks id newspapers_type_ad
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item size: large OR medium OR xlarge OR small & Item type: picture
+And breadcrumbs contain Item size: small OR xlarge OR large OR medium & Item type: picture
 And hits 13
 
 Scenario: Advanced search with ad type
@@ -81,7 +81,7 @@ When user checks id newspapers_type_article
 And user checks id newspapers_type_picture
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item size: large OR medium OR xlarge OR small & Item type: ad
+And breadcrumbs contain Item size: small OR xlarge OR large OR medium & Item type: ad
 And hits 93
 
 Scenario: Advanced search with article type
@@ -90,7 +90,7 @@ When user checks id newspapers_type_ad
 And user checks id newspapers_type_picture
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item size: large OR medium OR xlarge OR small & Item type: article
+And breadcrumbs contain Item size: small OR xlarge OR large OR medium & Item type: article
 And hits 193
 
 Scenario: Advanced search with none size
@@ -101,7 +101,7 @@ And user checks name newspapers_size_medium
 And user checks name newspapers_size_small
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item type: ad OR picture OR article
+And breadcrumbs contain Item type: article OR picture OR ad
 And hits 299
 
 Scenario: Advanced search with small size
@@ -111,7 +111,7 @@ And user checks name newspapers_size_large
 And user checks name newspapers_size_medium
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item size: small & Item type: ad OR picture OR article
+And breadcrumbs contain Item size: small & Item type: article OR picture OR ad
 And hits 255
 
 Scenario: Advanced search with medium size
@@ -121,7 +121,7 @@ And user checks name newspapers_size_large
 And user checks name newspapers_size_small
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item size: medium & Item type: ad OR picture OR article
+And breadcrumbs contain Item size: medium & Item type: article OR picture OR ad
 And hits 24
 
 Scenario: Advanced search with large size
@@ -131,7 +131,7 @@ And user checks name newspapers_size_medium
 And user checks name newspapers_size_small
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item size: large & Item type: ad OR picture OR article
+And breadcrumbs contain Item size: large & Item type: article OR picture OR ad
 And hits 14
 
 Scenario: Advanced search with xlarge size
@@ -141,5 +141,5 @@ And user checks name newspapers_size_medium
 And user checks name newspapers_size_small
 And user clicks 'submit' at the bottom of form
 Then title is Search Results
-And breadcrumbs contain Item size: xlarge & Item type: ad OR picture OR article
+And breadcrumbs contain Item size: xlarge & Item type: article OR picture OR ad
 And hits 6

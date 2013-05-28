@@ -14,7 +14,7 @@ And user enters 1856 in the form name actyear
 And user selects cre in the form name language
 And user clicks 'go'
 Then title is Search Results
-And breadcrumbs contain Title: Book of Common Prayer AND Publication year: [1850 TO 1860] AND Activity year: 1856 AND Subject: Indians of North America--Languages AND Author: Hunter, James AND Language: Cree
+And breadcrumbs contain Subject: Indians of North America--Languages AND Publication year: [1850 TO 1860] AND Author: Hunter, James AND Title: Book of Common Prayer AND Activity year: 1856 AND Language: Cree
 And hits 1
 And first result is Peel 329
 
