@@ -54,7 +54,7 @@ public class SearchSteps extends PeelSteps {
 	@Alias("user enters $value in the form id $id")
 	public void whenUserEntersIdValueInTheForm(@Named("id") String id,
 			@Named("value") String value) {
-		if (isProduction)
+		if (isOldGUI)
 			id += "display";
 		enterInElement(By.id(id), value);
 	}
@@ -175,7 +175,7 @@ public class SearchSteps extends PeelSteps {
 					.getText();
 			assertTrue("'" + firstResultActual + "' should match '"
 					+ firstResultExpected + "'",
-					firstResultActual.matches(firstResultExpected));
+					firstResultActual.contains(firstResultExpected));
 		}
 	}
 
@@ -291,15 +291,23 @@ public class SearchSteps extends PeelSteps {
 
 	private void assertPeelnumOrder(WebElement firstResult,
 			WebElement secondResult) {
-		String peelnum1 = firstResult.findElement(By.xpath("dl/dt/a"))
-				.getText();
-		String peelnum2 = secondResult.findElement(By.xpath("dl/dt/a"))
-				.getText();
+		String peelnum1 = padPeelNum(firstResult.findElement(By.xpath("dl/dt/a"))
+				.getText());
+		String peelnum2 = padPeelNum(secondResult.findElement(By.xpath("dl/dt/a"))
+				.getText());
 		assertTrue(peelnum1 + " should be before " + peelnum2,
 				peelnum1.compareTo(peelnum2) < 0);
 	}
 
-	public enum Sorts {
+	private String padPeelNum(String text) {
+    text = text.replaceAll("Peel ", "");
+    int length = text.indexOf('.') > 0 ? text.indexOf('.') : text.length();
+    for( int i = 0; i < 6-length; i++ )
+      text = "0" + text;
+    return text;
+  }
+
+  public enum Sorts {
 		score,
 		peelnum,
 		pubyear_asc, 

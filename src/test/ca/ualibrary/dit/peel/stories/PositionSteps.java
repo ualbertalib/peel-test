@@ -34,34 +34,38 @@ public class PositionSteps extends PeelSteps {
 
 	@When("user clicks through to item")
 	public void whenUserClicksThroughToItem() {
-		WebElement firstResult = driver.findElement(By
-				.xpath("//li[@class='result'][@value=1]"));
-		WebElement page = firstResult.findElement(By
-				.xpath("dl/dd[@class='results']/a"));
-		String title = firstResult.findElement(By.xpath("dl/dt/a")).getText()
-				+ ", p. " + page.getText();
-		page.click();
-    wait.until(ExpectedConditions.titleIs(title));
-
-		assertEquals(title, driver.getTitle());
+	  
+	  if( hasContent ) {
+	    WebElement firstResult = driver.findElement(By
+	        .xpath("//li[@class='result'][@value=1]"));
+	    WebElement page = firstResult.findElement(By
+	        .xpath("dl/dd[@class='results']/a"));
+	    String title = firstResult.findElement(By.xpath("dl/dt/a")).getText()
+	        + ", p. " + page.getText();
+	    page.click();
+	    wait.until(ExpectedConditions.titleIs(title));
+	    
+	    assertEquals(title, driver.getTitle());
+	  }
 	}
 	
 	@When("user clicks through to a newspaper item")
 	public void whenUserClicksThroughToANewspaperItem() {
-		WebElement firstResult = driver.findElement(By
-				.xpath("//li[@class='result'][@value=1]"));
-		WebElement page = firstResult.findElement(By
-        .xpath("dl/dd[@class='image']/a/img"));
-		String title = firstResult.findElement(By.xpath("dl/dt")).getText();
-    title = title.replaceAll("p\\.", "Page ");
-		// replace last ',' with ', Item'
-		int lastComma = title.lastIndexOf(",");
-		title = title.substring(0, lastComma + 1) + " Item"
-				+ title.substring(lastComma + 1, title.length());
-		page.click();
-    wait.until(ExpectedConditions.titleIs(title));
-
-		assertEquals(title, driver.getTitle());
+	  if( hasContent ) {
+	    WebElement firstResult = driver.findElement(By
+	        .xpath("//li[@class='result'][@value=1]"));
+	    WebElement page = firstResult.findElement(By
+	        .xpath("dl/dd[@class='image']/a/img"));
+	    String title = firstResult.findElement(By.xpath("dl/dt")).getText();
+	    title = title.replaceAll("p\\.", "Page ");
+	    // replace last ',' with ', Item'
+	    int lastComma = title.lastIndexOf(",");
+	    title = title.substring(0, lastComma + 1) + " Item"
+	        + title.substring(lastComma + 1, title.length());
+	    page.click();
+	    wait.until(ExpectedConditions.titleIs(title));
+	    assertEquals(title, driver.getTitle());
+	  }
 	}
 
 	@Then("results contain hits on page")
@@ -70,14 +74,22 @@ public class PositionSteps extends PeelSteps {
 				.xpath("//li[@class='result']/dl/dd[@class='results']/a")));
 
 		String prefix = "^[0-9]+ hits on [0-9]+ pages:.*";
-		assertTrue("should specify x hits on y pages",
-				driver.findElement(By.cssSelector("dd.results")).getText()
-						.matches(prefix));
+		if( isSample ) { 
+		  assertTrue("should specify x hits on y pages",
+		      driver.findElement(By.cssSelector("dd.results")).getText()
+		      .matches(prefix));
+		} else {
+		  String text = driver.findElement(By.cssSelector("dd.results")).getText();
+		  boolean matches = text.matches(prefix) || text.matches("Full text unavailable");
+		  assertTrue("should specify unavailable or x hits on y pages", matches);
+		}
 	}
 
 	@Then("something is highlighted")
 	public void thenSomethingIsHighlighted() {
-		assertTrue(isElementPresent(By.cssSelector("img.highlight_on")));
+	  if ( hasContent ) {
+	    assertTrue(isElementPresent(By.cssSelector("img.highlight_on")));
+	  }
 	}
 
 	private boolean isElementPresent(By by) {

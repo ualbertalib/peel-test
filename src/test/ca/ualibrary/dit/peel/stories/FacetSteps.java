@@ -279,27 +279,29 @@ public class FacetSteps extends SearchSteps {
 
 	@Then("results have peelbib years of publication in $range range")
 	public void thenResultsHavePeelbibYearsOfPublicationInRange()
-			throws ParseException {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy");
-		String[] dates = facetText.split(" \\p{Pd} ");
-		Date lowerDate = format.parse(dates[0]);
-		Date upperDate = format.parse(dates[1]);
-
-		WebElement firstResult = driver.findElement(By
-				.xpath("//li[@class='result'][@value=1]"));
-		String pubyear1 = firstResult
-				.findElement(By.xpath("dl/dd[@class='info']")).getText().trim();
-		int sample = pubyear1.length() < 6 ? pubyear1.length() : 6;
-		// ignore this it's not the publication year
-		if (!pubyear1.matches(".*\\[[0-9]{4}\\]")) {
-			Date date = format.parse(pubyear1.substring(
-					pubyear1.length() - sample).replaceAll("[^0-9]*", ""));
-
-			assertTrue("should be greater than " + lowerDate,
-					lowerDate.compareTo(date) <= 0);
-			assertTrue("should be greater than " + upperDate,
-					upperDate.compareTo(date) >= 0);
-		}
+	    throws ParseException {
+	  if( isSample ) {
+	    SimpleDateFormat format = new SimpleDateFormat("yyyy");
+	    String[] dates = facetText.split(" \\p{Pd} ");
+	    Date lowerDate = format.parse(dates[0]);
+	    Date upperDate = format.parse(dates[1]);
+	    
+	    WebElement firstResult = driver.findElement(By
+	        .xpath("//li[@class='result'][@value=1]"));
+	    String pubyear1 = firstResult
+	        .findElement(By.xpath("dl/dd[@class='info']")).getText().trim();
+	    int sample = pubyear1.length() < 6 ? pubyear1.length() : 6;
+	    // ignore this it's not the publication year
+	    if (!pubyear1.matches(".*\\[[0-9]{4}\\]")) {
+	      Date date = format.parse(pubyear1.substring(
+	          pubyear1.length() - sample).replaceAll("[^0-9]*", ""));
+	      
+	      assertTrue("should be greater than " + lowerDate,
+	          lowerDate.compareTo(date) <= 0);
+	      assertTrue("should be greater than " + upperDate,
+	          upperDate.compareTo(date) >= 0);
+	    }
+	  }
 	}
 
 	@Then("results have $position language")
@@ -310,8 +312,12 @@ public class FacetSteps extends SearchSteps {
 		resultLanguageActual = resultLanguageActual
 				.substring(resultLanguageActual.indexOf("Language: ")
 						+ "Language: ".length());
+		String[] results = resultLanguageActual.split(";");
+		boolean matches = false;
+		for( String result : results )
+		  matches = matches || result.trim().matches(facetText);
 		assertTrue("'" + resultLanguageActual + "' should match '" + facetText
-				+ "'", resultLanguageActual.matches(facetText));
+				+ "'", matches);
 	}
 
 	@Then("results have $position publication")
@@ -350,14 +356,14 @@ public class FacetSteps extends SearchSteps {
 	  List<WebElement> facets = driver.findElements(By
 				.xpath("//*[@id=\"mainCol\"]/div/ul/li/a"));
 		assertTrue("first entry should match prefix", 
-				facets.get(0).getText().startsWith(prefix));
+				facets.get(0).getText().replaceAll("The ", "").startsWith(prefix));
 		assertTrue("last entry should match prefix",
 				facets.get(facets.size() - 1)
-				.getText().startsWith(prefix));
+				.getText().replaceAll("The ", "").startsWith(prefix));
 		Random rand = new Random();
 		if (1 < facets.size())
 			assertTrue("random entry should match prefix",
-					facets.get(rand.nextInt(facets.size() - 1)).getText()
+					facets.get(rand.nextInt(facets.size() - 1)).getText().replaceAll("The ", "")
 							.startsWith(prefix));
 	}
 

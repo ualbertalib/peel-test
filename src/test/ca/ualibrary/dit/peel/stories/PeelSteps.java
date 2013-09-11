@@ -30,9 +30,23 @@ public class PeelSteps extends SeleneseTestBase {
 	protected String baseUrl;
 	private Properties prop;
   protected boolean isSample = false;
-  protected boolean isProduction = true;
-	private static String PEEL_SOLR_SAMPLE = "peel-solr";
-	private static String PRODUCTION_SAMPLE = "production";
+  protected boolean isOldGUI = true;
+  protected boolean hasContent = false;
+  
+  private static String PEEL_WWW_CONTENT = "peel-www.content";
+  private static String PEEL_WWW_CONTENT_SAMPLE = "peel-www";
+  private static String PEEL_WWW_CONTENT_PRODUCTION = "production";
+  private static String PEEL_WWW_CONTENT_UNKNOWN = "unknown";
+  
+  private static String PEEL_WWW_UI = "peel-www.ui";
+  private static String PEEL_WWW_UI_SOLR41 = "solr4.1";
+  
+  private static String PEEL_SOLR_CONTENT = "peel-solr.content";
+  private static String PEEL_SOLR_CONTENT_SAMPLE = "peel-solr";
+  private static String PEEL_SOLR_CONTENT_PRODUCTION = "production";
+	private static String PEEL_SOLR_CONTENT_UNKNOWN = "unknown";
+	
+	private static String BROWSER = "browser";
   private static String BROWSER_IEXPLORER = "iexplorer";
   private static String BROWSER_SAFARI = "safari";
   private static String BROWSER_CHROME = "chrome";
@@ -51,20 +65,22 @@ public class PeelSteps extends SeleneseTestBase {
       prop.load(new FileInputStream(new java.io.File("").getAbsolutePath()
           + "/test.properties"));
       baseUrl = prop.getProperty("baseUrl");
-      isSample = PEEL_SOLR_SAMPLE.equals(prop.getProperty("sample"));
-      isProduction = PRODUCTION_SAMPLE.equals(prop.getProperty("sample"));
+      isSample = PEEL_SOLR_CONTENT_SAMPLE.equals(prop.getProperty(PEEL_SOLR_CONTENT));
+      isOldGUI = !PEEL_WWW_UI_SOLR41.equals(prop.getProperty(PEEL_WWW_UI));
+      hasContent = !PEEL_WWW_CONTENT_UNKNOWN.equals(prop.getProperty(PEEL_WWW_CONTENT));
       
-      initBrowserDriver(prop.getProperty("browser"));
+      initBrowserDriver(prop.getProperty(BROWSER));
       
     } catch (Exception e) {
-      initBrowserDriver(System.getenv("browser"));
+      initBrowserDriver(System.getenv(BROWSER));
       baseUrl = System.getenv("baseUrl");
       if (null == baseUrl) baseUrl = "http://peeldev1.library.ualberta.ca";
-      String sample = System.getenv("sample");
+      String sample = System.getenv(PEEL_SOLR_CONTENT);
       if (null != sample) {
-        isSample = PEEL_SOLR_SAMPLE.equals(sample);
-        isProduction = PRODUCTION_SAMPLE.equals(sample);
+        isSample = PEEL_SOLR_CONTENT_SAMPLE.equals(sample);
+        isOldGUI = !PEEL_WWW_UI_SOLR41.equals(sample);
       }
+      hasContent = !PEEL_WWW_CONTENT_UNKNOWN.equals(System.getenv(PEEL_SOLR_CONTENT));
     }
     
     if (!baseUrl.endsWith("/")) baseUrl += "/";
